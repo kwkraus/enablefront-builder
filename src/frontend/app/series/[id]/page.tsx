@@ -13,12 +13,12 @@ interface Props {
 export async function generateMetadata({ params }: Props) {
   const { id } = await params
   const session = await getServerSession()
-  if (!session?.accessToken) return { title: 'Series — EdgeFront Builder' }
+  if (!session?.accessToken) return { title: 'Series — EnableFront Builder' }
   try {
     const series = await getSeriesById(id, session.accessToken)
-    return { title: `${series.title} — EdgeFront Builder` }
+    return { title: `${series.title} — EnableFront Builder` }
   } catch {
-    return { title: 'Series — EdgeFront Builder' }
+    return { title: 'Series — EnableFront Builder' }
   }
 }
 

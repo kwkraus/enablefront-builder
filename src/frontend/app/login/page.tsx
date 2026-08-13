@@ -65,7 +65,7 @@ export default function LoginPage() {
         style={cardStyle}
       >
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight">EdgeFront Builder</h1>
+          <h1 className="text-2xl font-bold tracking-tight">EnableFront Builder</h1>
           <p className="text-sm" style={mutedTextStyle}>
             Sign in to manage your webinar series
           </p>
@@ -88,7 +88,7 @@ export default function LoginPage() {
         </Suspense>
 
         <p className="text-xs" style={mutedTextStyle}>
-          Requires an active Entra ID account with access to EdgeFront Builder.
+          Requires an active Entra ID account with access to EnableFront Builder.
         </p>
       </div>
     </div>

@@ -4,7 +4,7 @@ import Providers from "@/components/providers";
 import AppHeader from "@/components/app-header";
 
 export const metadata: Metadata = {
-  title: "EdgeFront Builder",
+  title: "EnableFront Builder",
   description: "Manage webinar series, sessions, and engagement metrics",
 };
 

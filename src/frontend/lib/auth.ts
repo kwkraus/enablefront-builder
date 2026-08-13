@@ -1,15 +1,42 @@
 import { getServerSession as nextGetServerSession, type AuthOptions } from 'next-auth'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 
+const isGuid = (value: string | undefined) =>
+  typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    value.trim(),
+  )
+
+const readRequiredGuid = (name: string): string => {
+  const value = process.env[name]?.trim()
+
+  if (!isGuid(value)) {
+    throw new Error(
+      `Invalid Azure AD config: ${name} must be a GUID. Check src/frontend/.env.local and restart the Next.js server.`,
+    )
+  }
+
+  return value as string
+}
+
+const clientId = readRequiredGuid('AZURE_AD_CLIENT_ID')
+const tenantId = readRequiredGuid('AZURE_AD_TENANT_ID')
+const clientSecret = process.env.AZURE_AD_CLIENT_SECRET?.trim() ?? ''
+
+if (!clientSecret) {
+  throw new Error(
+    'Invalid Azure AD config: AZURE_AD_CLIENT_SECRET is missing. Check src/frontend/.env.local and restart the Next.js server.',
+  )
+}
+
 export const authOptions: AuthOptions = {
   providers: [
     AzureADProvider({
-      clientId: process.env.AZURE_AD_CLIENT_ID!,
-      clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
-      tenantId: process.env.AZURE_AD_TENANT_ID!,
+      clientId,
+      clientSecret,
+      tenantId,
       authorization: {
         params: {
-          scope: `openid profile email offline_access api://${process.env.AZURE_AD_CLIENT_ID}/access_as_user`,
+          scope: `openid profile email offline_access api://${clientId}/access_as_user`,
           prompt: 'select_account',
           // Optional: route home-realm discovery to a specific tenant domain so
           // cached SSO accounts don't auto-resolve to their home tenant.
@@ -20,7 +47,7 @@ export const authOptions: AuthOptions = {
       },
       token: {
         params: {
-          scope: `openid profile email offline_access api://${process.env.AZURE_AD_CLIENT_ID}/access_as_user`,
+          scope: `openid profile email offline_access api://${clientId}/access_as_user`,
         },
       },
     }),

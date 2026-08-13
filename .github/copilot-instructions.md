@@ -20,7 +20,7 @@ Treat frontend and backend as separate components. Project docs go in `docs/` (k
 
 | Task | Agent |
 |---|---|
-| TDD, test-first, regression tests | `edgefront-tdd-engineer` |
+| TDD, test-first, regression tests | `frontend-backend-tdd-engineer` |
 | Spec authoring (functional/technical) | `spec-driven-development` |
 | Spec-managed items (`New`/`Active`, `review:ready`, `techspec:stale`) — Description/AC edits | `spec-driven-development` |
 | General board CRUD, sprint/task/bug | `devops-workitem-manager` |

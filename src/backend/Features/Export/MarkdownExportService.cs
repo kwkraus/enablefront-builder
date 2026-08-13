@@ -163,7 +163,7 @@ public sealed class MarkdownExportService
         // Footer — capture the export timestamp once so it is consistent
         // even if the method is ever made more complex in the future.
         sb.AppendLine();
-        sb.Append($"*Exported from EdgeFront Builder on {DateTime.UtcNow:MMMM d, yyyy}*");
+        sb.Append($"*Exported from EnableFront Builder on {DateTime.UtcNow:MMMM d, yyyy}*");
 
         // ── 5. Generate the sanitized filename ──────────────────────────────────
         var fileName = FileNameSanitizer.Sanitize(series.Title);

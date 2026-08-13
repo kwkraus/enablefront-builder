@@ -6,11 +6,11 @@ test.describe('About page', () => {
   });
 
   test('has correct page title', async ({ page }) => {
-    await expect(page).toHaveTitle(/About - EdgeFront Builder/);
+    await expect(page).toHaveTitle(/About - EnableFront Builder/);
   });
 
   test('displays the main heading', async ({ page }) => {
-    await expect(page.getByRole('heading', { level: 1, name: 'About EdgeFront Builder' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'About EnableFront Builder' })).toBeVisible();
   });
 
   test('displays The Application section', async ({ page }) => {
@@ -27,7 +27,7 @@ test.describe('About page', () => {
 
   test('displays Our Team section', async ({ page }) => {
     await expect(page.getByRole('heading', { level: 2, name: 'Our Team' })).toBeVisible();
-    await expect(page.getByText('Built by EdgeFront')).toBeVisible();
+    await expect(page.getByText('Built by EnableFront')).toBeVisible();
   });
 
   test('header About link navigates to about page', async ({ page }) => {
@@ -36,7 +36,7 @@ test.describe('About page', () => {
     // Click the About link in the header
     await page.getByRole('link', { name: 'About' }).click();
     await expect(page).toHaveURL(/\/about/);
-    await expect(page.getByRole('heading', { level: 1, name: 'About EdgeFront Builder' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'About EnableFront Builder' })).toBeVisible();
   });
 
   test('page is accessible without authentication', async ({ page }) => {
