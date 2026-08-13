@@ -1,6 +1,6 @@
-# EdgeFront Builder
+# EnableFront Builder
 
-EdgeFront Builder is a **webinar management platform** for local event planning, participation tracking, and engagement analytics. It helps organizations manage webinar series and individual sessions while preparing normalized event data for ingestion-first reporting workflows.
+EnableFront Builder is a **webinar management platform** for local event planning, participation tracking, and engagement analytics. It helps organizations manage webinar series and individual sessions while preparing normalized event data for ingestion-first reporting workflows.
 
 ![About EdgeFront Builder](https://github.com/user-attachments/assets/674c414a-8e81-47f5-90e1-6695f224319a)
 
