@@ -1,13 +1,13 @@
 ---
 name: devops-workitem-manager
-description: 'Manage Azure DevOps work items for the edgefront-builder project. Use to read requirements from your board, create new items for features, bugs, or tasks, update work item status, and support implementation planning from board items.'
+description: 'Manage Azure DevOps work items for the EnableFront Builder project. Use to read requirements from your board, create new items for features, bugs, or tasks, update work item status, and support implementation planning from board items.'
 ---
 
 Azure DevOps board manager.
 
 ## Configuration
 - **Organization**: kkraus
-- **Project**: edgefront-builder
+- **Project**: EnableFront Builder
 - **Invocation**: Manual (when user explicitly requests board operations)
 
 Always use the configured org/project — never ask.
