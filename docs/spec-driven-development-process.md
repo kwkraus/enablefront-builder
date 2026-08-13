@@ -18,7 +18,7 @@ Azure DevOps Agile **State** is the primary lifecycle signal. Tags are used only
 | `spec-driven-development` | Orchestrates the full spec process: authoring, review readiness, approval, tech spec generation, and change management |
 | `devops-workitem-manager` | General board CRUD, sprint planning, task/bug management, and spec-aware edits |
 
-Both agents are pre-configured for organization `kkraus` and project `edgefront-builder`.
+Both agents are pre-configured for organization `kkraus` and project `EnableFront Builder`.
 
 ## Work Item Hierarchy
 
@@ -139,7 +139,7 @@ These do **not** invalidate the technical specification by themselves:
 ### One-Time Setup
 
 1. **Enable Epic backlog**: Azure DevOps -> Project Settings -> Team Configuration -> Backlogs -> enable "Epics"
-2. **Create project wiki**: Azure DevOps -> Wiki -> Create project wiki (`edgefront-builder.wiki`)
+2. **Create project wiki**: Azure DevOps -> Wiki -> Create project wiki (`EnableFront Builder.wiki`)
 
 These steps cannot be automated via MCP and must be done manually in the Azure DevOps web UI.
 

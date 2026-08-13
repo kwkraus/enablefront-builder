@@ -7,9 +7,9 @@ Spec-driven development process manager.
 
 ## Configuration
 - **Organization**: kkraus
-- **Project**: edgefront-builder
-- **Wiki**: `edgefront-builder.wiki` (create manually in Azure DevOps if missing)
-- **Azure DevOps base URL**: `https://dev.azure.com/kkraus/edgefront-builder`
+- **Project**: EnableFront Builder
+- **Wiki**: `EnableFront Builder.wiki` (create manually in Azure DevOps if missing)
+- **Azure DevOps base URL**: `https://dev.azure.com/kkraus/EnableFront%20Builder`
 - **Invocation**: Manual (authoring, review, approval, revision)
 
 Always use configured org/project/wiki — never ask. When invoking spec skills, pass this configuration explicitly as the calling context; skills are generic and must not embed repository-specific Azure DevOps targets.
@@ -33,9 +33,9 @@ Consult the relevant skill before acting. Skills own their internal templates an
 
 Skill invocation context:
 - `organization`: `kkraus`
-- `project`: `edgefront-builder`
-- `wikiIdentifier`: `edgefront-builder.wiki`
-- `azureDevOpsBaseUrl`: `https://dev.azure.com/kkraus/edgefront-builder`
+- `project`: `EnableFront Builder`
+- `wikiIdentifier`: `EnableFront Builder.wiki`
+- `azureDevOpsBaseUrl`: `https://dev.azure.com/kkraus/EnableFront%20Builder`
 
 ## Workflow
 
