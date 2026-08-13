@@ -1,9 +1,9 @@
-using EdgeFront.Builder.Domain;
-using EdgeFront.Builder.Domain.Entities;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Domain;
+using EnableFront.Builder.Domain.Entities;
+using EnableFront.Builder.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace EdgeFront.Builder.Features.Metrics;
+namespace EnableFront.Builder.Features.Metrics;
 
 /// <summary>
 /// Atomically recomputes and upserts <see cref="SessionMetrics"/> and <see cref="SeriesMetrics"/>

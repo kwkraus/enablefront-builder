@@ -1,4 +1,4 @@
-namespace EdgeFront.Builder.Features.Sessions.Dtos;
+namespace EnableFront.Builder.Features.Sessions.Dtos;
 
 public record SessionResponseDto(
     Guid SessionId,

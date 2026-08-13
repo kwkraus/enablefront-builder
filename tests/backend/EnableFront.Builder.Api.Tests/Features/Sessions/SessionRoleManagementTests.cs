@@ -1,12 +1,12 @@
-using EdgeFront.Builder.Domain.Entities;
-using EdgeFront.Builder.Features.People;
-using EdgeFront.Builder.Features.Sessions;
-using EdgeFront.Builder.Features.Sessions.Dtos;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Domain.Entities;
+using EnableFront.Builder.Features.People;
+using EnableFront.Builder.Features.Sessions;
+using EnableFront.Builder.Features.Sessions.Dtos;
+using EnableFront.Builder.Infrastructure.Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace EdgeFront.Builder.Tests.Features.Sessions;
+namespace EnableFront.Builder.Api.Tests.Features.Sessions;
 
 public class SessionRoleManagementTests : IDisposable
 {
@@ -148,9 +148,9 @@ public class SessionRoleManagementTests : IDisposable
         saved[0].EntraUserId.Should().Be("user-c1");
     }
 
-    private async Task<(EdgeFront.Builder.Domain.Entities.Series, Session)> SeedSessionAsync()
+    private async Task<(EnableFront.Builder.Domain.Entities.Series, Session)> SeedSessionAsync()
     {
-        var series = new EdgeFront.Builder.Domain.Entities.Series
+        var series = new EnableFront.Builder.Domain.Entities.Series
         {
             SeriesId = Guid.NewGuid(),
             OwnerUserId = OwnerUserId,

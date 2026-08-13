@@ -1,4 +1,4 @@
-namespace EdgeFront.Builder.Domain.Entities;
+namespace EnableFront.Builder.Domain.Entities;
 
 public class WarmAccountEntry
 {

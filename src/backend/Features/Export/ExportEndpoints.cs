@@ -1,7 +1,7 @@
-using EdgeFront.Builder.Common.Extensions;
+using EnableFront.Builder.Common.Extensions;
 using System.Text;
 
-namespace EdgeFront.Builder.Features.Export;
+namespace EnableFront.Builder.Features.Export;
 
 public static class ExportEndpoints
 {

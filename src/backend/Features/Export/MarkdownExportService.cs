@@ -1,8 +1,8 @@
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
-namespace EdgeFront.Builder.Features.Export;
+namespace EnableFront.Builder.Features.Export;
 
 /// <summary>
 /// Builds a share-safe markdown export for a single series and all its sessions.

@@ -1,6 +1,6 @@
 using Microsoft.Identity.Web;
 
-namespace EdgeFront.Builder.Infrastructure.Graph;
+namespace EnableFront.Builder.Infrastructure.Graph;
 
 public interface IOboTokenService
 {

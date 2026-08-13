@@ -1,12 +1,12 @@
-using EdgeFront.Builder.Domain;
-using EdgeFront.Builder.Domain.Entities;
-using EdgeFront.Builder.Features.Metrics;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Domain;
+using EnableFront.Builder.Domain.Entities;
+using EnableFront.Builder.Features.Metrics;
+using EnableFront.Builder.Infrastructure.Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace EdgeFront.Builder.Tests.Features.Metrics;
+namespace EnableFront.Builder.Api.Tests.Features.Metrics;
 
 /// <summary>
 /// SPEC-300 §7 and §8 — Metrics recompute service tests.
@@ -340,9 +340,9 @@ public class MetricsRecomputeTests : IDisposable
 
     // ─── helpers ────────────────────────────────────────────────────────────
 
-    private async Task<(EdgeFront.Builder.Domain.Entities.Series, Session)> SeedSeriesAndSessionAsync()
+    private async Task<(EnableFront.Builder.Domain.Entities.Series, Session)> SeedSeriesAndSessionAsync()
     {
-        var series = new EdgeFront.Builder.Domain.Entities.Series
+        var series = new EnableFront.Builder.Domain.Entities.Series
         {
             SeriesId = Guid.NewGuid(),
             OwnerUserId = OwnerUserId,

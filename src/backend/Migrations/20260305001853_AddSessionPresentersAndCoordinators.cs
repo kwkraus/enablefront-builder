@@ -1,9 +1,8 @@
-﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace EdgeFront.Builder.Migrations
+namespace EnableFront.Builder.Migrations
 {
     /// <inheritdoc />
     public partial class AddSessionPresentersAndCoordinators : Migration

@@ -1,8 +1,7 @@
 using Microsoft.Graph;
 using Microsoft.Kiota.Abstractions.Authentication;
-using Microsoft.Kiota.Http.HttpClientLibrary;
 
-namespace EdgeFront.Builder.Infrastructure.Graph;
+namespace EnableFront.Builder.Infrastructure.Graph;
 
 /// <summary>
 /// Wraps Microsoft Graph SDK calls for delegated directory user lookups.

@@ -1,4 +1,4 @@
-namespace EdgeFront.Builder.Features.Metrics.Dtos;
+namespace EnableFront.Builder.Features.Metrics.Dtos;
 
 public record SessionMetricsResponseDto(
     Guid SessionId,

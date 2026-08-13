@@ -1,9 +1,8 @@
-using EdgeFront.Builder.Domain.Entities;
-using EdgeFront.Builder.Features.Series.Dtos;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Features.Series.Dtos;
+using EnableFront.Builder.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace EdgeFront.Builder.Features.Series;
+namespace EnableFront.Builder.Features.Series;
 
 public class SeriesService
 {

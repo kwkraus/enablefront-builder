@@ -1,8 +1,8 @@
-using EdgeFront.Builder.Domain;
-using EdgeFront.Builder.Domain.Entities;
+using EnableFront.Builder.Domain;
+using EnableFront.Builder.Domain.Entities;
 using FluentAssertions;
 
-namespace EdgeFront.Builder.Tests.Domain;
+namespace EnableFront.Builder.Api.Tests.Domain;
 
 public class WarmRuleEvaluatorTests
 {

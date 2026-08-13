@@ -1,3 +1,3 @@
-namespace EdgeFront.Builder.Features.Series.Dtos;
+namespace EnableFront.Builder.Features.Series.Dtos;
 
 public record CreateSeriesRequest(string Title);

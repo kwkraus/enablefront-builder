@@ -1,4 +1,4 @@
-namespace EdgeFront.Builder.Infrastructure.Graph;
+namespace EnableFront.Builder.Infrastructure.Graph;
 
 /// <summary>
 /// Delegated (OBO) Microsoft Graph access for directory user lookups.

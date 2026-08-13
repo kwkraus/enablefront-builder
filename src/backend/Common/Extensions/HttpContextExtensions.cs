@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace EdgeFront.Builder.Common.Extensions;
+namespace EnableFront.Builder.Common.Extensions;
 
 public static class HttpContextExtensions
 {

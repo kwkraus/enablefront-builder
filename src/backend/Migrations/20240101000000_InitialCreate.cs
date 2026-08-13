@@ -1,10 +1,9 @@
-using System;
+using EnableFront.Builder.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.Migrations;
-using EdgeFront.Builder.Infrastructure.Data;
 
 #nullable disable
 
-namespace EdgeFront.Builder.Migrations
+namespace EnableFront.Builder.Migrations
 {
     [Microsoft.EntityFrameworkCore.Infrastructure.DbContext(typeof(AppDbContext))]
     [Migration("20240101000000_InitialCreate")]

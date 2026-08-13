@@ -1,6 +1,6 @@
-using EdgeFront.Builder.Domain.Entities;
+using EnableFront.Builder.Domain.Entities;
 
-namespace EdgeFront.Builder.Domain;
+namespace EnableFront.Builder.Domain;
 
 public class WarmRuleEvaluator
 {

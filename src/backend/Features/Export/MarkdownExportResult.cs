@@ -1,4 +1,4 @@
-namespace EdgeFront.Builder.Features.Export;
+namespace EnableFront.Builder.Features.Export;
 
 /// <summary>
 /// Carries the generated markdown content and the sanitized filename that the

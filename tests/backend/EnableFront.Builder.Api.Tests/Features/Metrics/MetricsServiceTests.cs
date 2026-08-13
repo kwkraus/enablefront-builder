@@ -1,12 +1,11 @@
-using EdgeFront.Builder.Domain;
-using EdgeFront.Builder.Domain.Entities;
-using EdgeFront.Builder.Features.Metrics;
-using EdgeFront.Builder.Features.Metrics.Dtos;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Domain;
+using EnableFront.Builder.Domain.Entities;
+using EnableFront.Builder.Features.Metrics;
+using EnableFront.Builder.Infrastructure.Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace EdgeFront.Builder.Tests.Features.Metrics;
+namespace EnableFront.Builder.Api.Tests.Features.Metrics;
 
 /// <summary>
 /// Tests for MetricsService — ownership-checked metrics query layer.
@@ -156,9 +155,9 @@ public class MetricsServiceTests : IDisposable
 
     // ─── helpers ────────────────────────────────────────────────────────────
 
-    private async Task<EdgeFront.Builder.Domain.Entities.Series> SeedSeriesAsync()
+    private async Task<EnableFront.Builder.Domain.Entities.Series> SeedSeriesAsync()
     {
-        var series = new EdgeFront.Builder.Domain.Entities.Series
+        var series = new EnableFront.Builder.Domain.Entities.Series
         {
             SeriesId = Guid.NewGuid(),
             OwnerUserId = OwnerUserId,
@@ -171,7 +170,7 @@ public class MetricsServiceTests : IDisposable
         return series;
     }
 
-    private async Task<(EdgeFront.Builder.Domain.Entities.Series, Session)> SeedSessionAsync()
+    private async Task<(EnableFront.Builder.Domain.Entities.Series, Session)> SeedSessionAsync()
     {
         var series = await SeedSeriesAsync();
         var session = new Session
