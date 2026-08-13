@@ -1,236 +1,198 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: [TEMPLATE / unversioned] → 1.0.0
-Bump type: MAJOR — initial ratification; all content populated from repository context
+Version change: 1.0.0 → 1.1.0
+Bump type: MINOR — added a quality-focused principle set for maintainability, test discipline,
+UX consistency, and performance requirements while retaining the existing governance model.
 
-Modified principles (placeholder → concrete name):
-  [PRINCIPLE_1_NAME] → I. Spec-Driven Development
-  [PRINCIPLE_2_NAME] → II. Test-First / TDD
-  [PRINCIPLE_3_NAME] → III. Vertical-Slice Architecture
-  [PRINCIPLE_4_NAME] → IV. Metrics Persisted on Write
-  [PRINCIPLE_5_NAME] → V. Security by Default
-  (additional)       → VI. Structured Observability
-
-Replaced generic sections:
-  [SECTION_2_NAME / SECTION_2_CONTENT] → Tech Stack & Constraints
-  [SECTION_3_NAME / SECTION_3_CONTENT] → Development Workflow
-  [GOVERNANCE_RULES]                    → full governance text
+Modified principles (old title → new title):
+  I. Spec-Driven Development → I. Code Quality & Maintainability
+  II. Test-First / TDD → II. Testing Standards & Regression Prevention
+  III. Vertical-Slice Architecture → III. User Experience Consistency & Accessibility
+  IV. Metrics Persisted on Write → IV. Performance & Reliability Requirements
+  V. Security by Default → V. Security & Data Protection
+  VI. Structured Observability → VI. Operational Visibility
 
 Added sections:
-  - "VI. Structured Observability" (sixth principle beyond template's five)
-  - "Tech Stack & Constraints" (pinned stack, V1 constraints)
-  - "Development Workflow" (agent routing, quality gates, amendment procedure)
+  - Explicit quality and maintainability rules for code clarity and reviewability
+  - Testing standards tied to real user-visible behavior and regression prevention
+  - UX consistency and accessibility expectations for consistent product behavior
+  - Performance and reliability requirements for responsiveness and stability
 
 Removed sections:
-  - None (no previously-ratified sections existed)
+  - None; the original principles were re-scoped rather than deleted.
 
 Templates requiring updates:
-  ✅ .specify/templates/plan-template.md     — "Constitution Check" gate uses runtime
-     placeholder [Gates determined based on constitution file]; no structural edit needed.
-  ✅ .specify/templates/spec-template.md     — no constitution-specific structural changes.
-  ✅ .specify/templates/tasks-template.md    — task phases align with principles; no edits.
-  ✅ .specify/templates/checklist-template.md — no constitution-specific changes needed.
-  ✅ .github/agents/speckit.constitution.agent.md — no outdated agent-specific references.
-  ✅ .github/copilot-instructions.md          — consistent with all six principles; no edits.
-  ✅ .github/instructions/aspnet-webapi.instructions.md — consistent; no edits needed.
-  ✅ .github/instructions/nextjs.instructions.md        — consistent; no edits needed.
-  ✅ docs/spec-driven-development-process.md  — consistent with Principle I; no edits needed.
+  ✅ .specify/templates/plan-template.md — Constitution Check remains valid and generic.
+  ✅ .specify/templates/spec-template.md — no constitution-specific structural changes required.
+  ✅ .specify/templates/tasks-template.md — generic task flow remains valid for the updated principles.
+  ⚠ .github/copilot-instructions.md — confirm wording still aligns with the updated principle set.
+  ⚠ .github/instructions/aspnet-webapi.instructions.md — confirm backend quality guidance remains aligned.
+  ⚠ .github/instructions/nextjs.instructions.md — confirm UX/performance expectations remain aligned.
+  ⚠ docs/spec-driven-development-process.md — confirm any old principle wording is still consistent.
 
 Follow-up TODOs:
-  - None. All placeholders resolved from repository context.
+  - None.
 -->
 
 # EdgeFront Builder Constitution
 
 ## Core Principles
 
-### I. Spec-Driven Development
+### I. Code Quality & Maintainability
 
-Every feature MUST start as an approved functional specification before implementation begins.
-Functional specs are authored as an Epic → Feature → User Story hierarchy in Azure DevOps.
-No implementation work may begin until the Epic is in `Active` state with a recorded approval
-comment. Technical specifications are generated from approved functional specs and published as
-wiki pages under `/Tech-Specs/[Epic-ID]-[Slugified-Title]`. A functional spec that materially
-changes after technical spec generation MUST receive a `techspec:stale` flag and trigger spec
-regeneration before implementation continues.
+All implementation work MUST prioritize readable, consistent, and maintainable code.
 
-**Rationale**: Unconstrained implementation without agreed-upon requirements produces rework.
-Spec-first ensures alignment between stakeholders and implementers before any code is written.
+- Code MUST be organized into small, named units with clear responsibility boundaries.
+- Shared logic MUST be extracted to reusable abstractions only when it removes duplication or
+  clarifies intent; speculative abstractions are prohibited.
+- Backend and frontend changes MUST follow the repository's domain and feature structure without
+  introducing inconsistent naming, layering, or duplication.
+- Reviewers MUST reject changes that add complexity without a clear justification.
+- Production code MUST avoid dead code, hidden side effects, and brittle coupling.
 
-### II. Test-First / TDD (NON-NEGOTIABLE)
+**Rationale**: High-quality code reduces regression risk, makes onboarding faster, and preserves the
+ability to change features without destabilizing the application.
 
-All new functionality and bug-fix regressions MUST follow the red-green-refactor cycle: tests
-are written and confirmed to fail *before* implementation begins. This applies to both backend
-(xUnit) and frontend (Playwright E2E, Vitest).
+### II. Testing Standards & Regression Prevention
 
-- Backend contract tests and integration tests are required for all new API endpoints and for
-  any endpoint whose contract changes.
-- EF Core schema changes MUST be accompanied by verified migration scripts reviewed in PR.
-- Tests MUST be committed alongside (or before) the feature code — not as a follow-up.
-- No new feature is considered complete until all targeted tests pass in CI.
-- PRs without tests MUST include explicit, documented justification reviewed by an approver.
+All user-facing behavior and business rules MUST be tested before release.
 
-**Rationale**: Late testing introduces regressions, slows review cycles, and reduces deployment
-confidence. Test-first is the only discipline that guarantees specifications are executable.
+- New features, bug fixes, and schema changes MUST include failing tests before implementation.
+- Backend contract and integration tests MUST cover API behavior and data integrity.
+- Frontend behavior MUST be validated for rendering, interaction, and failure states.
+- Tests MUST validate actual user-visible behavior rather than implementation details.
+- Any skipped or intentionally deferred test coverage MUST be documented with a reason approved by
+  the reviewer.
+- Release validation MUST include the required build, lint, and test commands for the affected stack.
 
-### III. Vertical-Slice Architecture
+**Rationale**: Reliable software depends on evidence that changes work as expected under realistic
+conditions, not on manual confidence alone.
 
-The codebase MUST be organized by feature, not by layer.
+### III. User Experience Consistency & Accessibility
 
-- **Backend**: each feature lives in `Features/<Name>/` containing its endpoints, DTOs,
-  handlers, and validators. Shared primitives go in `Domain/` or `Common/`; shared
-  infrastructure in `Infrastructure/`. Horizontal layering of business logic is prohibited.
-- **Frontend**: each feature is a route directory under `app/<feature>/`. Shared UI components
-  live in `components/`; shared utilities in `lib/`. Cross-feature imports that bypass feature
-  boundaries are prohibited.
-- New projects, assemblies, or packages MUST be justified in `plan.md` Complexity Tracking
-  and reference an approved spec. Speculative additions are prohibited (YAGNI).
+The product MUST present a coherent, accessible, and predictable user experience across all surfaces.
 
-**Rationale**: Vertical slices reduce merge conflicts, enable independent story delivery, and
-make the codebase navigable without understanding the entire system.
+- Shared UI patterns MUST be reused instead of introducing ad hoc variations.
+- User flows MUST maintain consistent navigation, labeling, status messaging, and error handling.
+- Accessibility is a requirement: keyboard access, semantic markup, visible focus states, and
+  readable contrast MUST be preserved.
+- Empty, loading, and error states MUST be designed explicitly and handled consistently.
+- Frontend interactions MUST avoid ambiguous states and provide clear recovery paths for user errors.
 
-### IV. Metrics Persisted on Write
+**Rationale**: Consistency creates trust and accessibility expands the value of the product to every
+user without requiring a second learning curve.
 
-All metric aggregations (registrations, attendees, unique domain counts, warm-account
-influence) MUST be computed and stored at write time. Compute-on-read for aggregated metrics
-is prohibited.
+### IV. Performance & Reliability Requirements
 
-- Metric recomputes triggered by data changes MUST be atomic with the originating data write.
-- No lazy or deferred metric computation that could produce stale reads under normal operation.
-- The local data model is the authoritative ingestion-ready store. Normalized registration and
-  attendance records MUST be persisted before any downstream or analytical processing.
-- Schema changes that break normalization or remove the ability to replay/re-ingest records
-  are prohibited without an explicit migration plan reviewed in an approved spec.
+Product changes MUST preserve responsiveness and operational stability under normal usage.
 
-**Rationale**: Metrics are the product's primary analytical output. Persisting on write
-guarantees consistent reads, avoids N+1 computation spikes, and keeps data ready for future
-ingestion pipelines without schema rework.
+- UI interactions MUST remain responsive for the expected user workflows and data volumes.
+- API and database operations MUST avoid unnecessary repeated work, large synchronous blocks, and
+  avoidable data fetches.
+- Performance-sensitive work MUST include measurable constraints or reviewable rationale when the
+  requirement is non-trivial.
+- User-visible loading, retry, and fallback states MUST be used when work is asynchronous or may fail.
+- Changes that increase latency or instability without a documented product need are not permitted.
 
-### V. Security by Default
+**Rationale**: Fast and resilient experiences are core product quality, not optional optimization
+after the fact.
 
-Authentication and authorization are non-negotiable on all user-facing and business endpoints.
+### V. Security & Data Protection
 
-- All API endpoints under `/api/v1` (except explicitly designated public health checks) MUST
-  validate a Microsoft Entra ID JWT. `Microsoft.Identity.Web` is the sole approved
-  authentication middleware for the backend.
-- Microsoft Graph access MUST use delegated-only permissions via the OBO flow. Application
-  permissions, webhooks, background Graph services, and Teams webinar integration are
-  prohibited.
-- Secrets MUST be stored in environment variables or user-secrets. No secrets, connection
-  strings, or credentials may be committed to source control in any form.
-- Logs MUST NEVER contain secrets, PII, or authentication tokens. Sensitive identifiers MUST
-  be masked or omitted before writing to any log sink.
-- The Entra app registration MUST expose only the `access_as_user` scope for
-  frontend → backend token exchange and the minimum delegated Graph permissions required.
+Authentication, authorization, and sensitive data handling are mandatory.
 
-**Rationale**: Single-tenant Entra ID with delegated-only Graph access is the minimum security
-posture for an organizational tool that handles identity and participation data.
+- User and business endpoints MUST enforce identity validation and minimum required authorization.
+- Secrets, tokens, and connection strings MUST be stored outside source control.
+- Logs and diagnostics MUST exclude sensitive data, PII, and auth material.
+- Data access patterns MUST minimize exposure and follow least-privilege design.
+- Security exceptions MUST be documented, reviewed, and time-bounded.
 
-### VI. Structured Observability
+**Rationale**: Product trust depends on protecting identity and data even when a feature is otherwise
+working as intended.
 
-Production-safe structured logging is required across all critical backend flows and must be
-non-intrusive on frontend flows.
+### VI. Operational Visibility
 
-- Log events MUST use stable, snake_case named properties (e.g., `session_id`,
-  `registration_count`) — no free-form string interpolation with embedded runtime values.
-- All request/response flows MUST carry a correlation identifier in structured log properties.
-- Severity policy: `ERROR` for actionable failures requiring operator intervention; `WARNING`
-  for degraded-but-recoverable states; `INFO` for lifecycle events; `DEBUG` permitted only
-  in non-production contexts.
-- Frontend: browser console errors MUST NOT be suppressed. Playwright E2E tests MUST capture
-  network request logs via the test runner's network inspection hooks.
-- No diagnostic data that could reveal PII, secrets, or auth tokens may appear in any log
-  output regardless of severity level.
+Engineering work MUST produce enough evidence to diagnose, validate, and support delivery.
 
-**Rationale**: Structured logs are the primary incident-triage tool. Without stable field names
-and correlation context, diagnosing production failures is non-deterministic and unreliable.
+- Structured logging and correlated request context MUST be used for critical flows.
+- Metrics and diagnostics MUST support feature validation and incident triage.
+- Changes that affect runtime behavior MUST include a clear verification path for operators and
+  reviewers.
+- Failure states MUST be observable without invasive debugging or guesswork.
+
+**Rationale**: Observability is part of product quality; without it, teams cannot safely operate or
+improve the system.
 
 ## Tech Stack & Constraints
 
-The following technology selections are approved and locked. Changes require a constitution
-amendment.
+The following technology selections are approved and locked for this project unless a constitution
+amendment is approved.
 
 | Layer | Approved Stack |
 |---|---|
-| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, Primer React v38, next-auth |
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS v4, Primer React v38, next-auth |
 | Backend | ASP.NET Core Minimal API (.NET 10), EF Core, Azure SQL |
-| Auth | Microsoft Entra ID single-tenant — `Microsoft.Identity.Web` |
-| Graph | `Microsoft.Graph` SDK, delegated OBO only (`User.ReadBasic.All`, `User.Read`) |
+| Auth | Microsoft Entra ID single-tenant with Microsoft.Identity.Web |
+| Graph | Microsoft.Graph SDK, delegated OBO only |
 | Hosting | Azure App Service |
-| Testing — Backend | xUnit (`tests/backend/`) |
-| Testing — Frontend | Playwright E2E (`src/frontend/e2e/`) |
+| Testing | xUnit for backend, Playwright E2E for frontend |
 
-**V1 Constraints** (in effect until an approved spec explicitly lifts them):
+**Project Constraints**:
 
-- No new external runtime dependencies without an approved spec and Complexity Tracking entry.
-- No API pagination — V1 returns all records within reasonable operational limits.
-- No optimistic UI updates — inline error banners with retry are the required error pattern.
-- Desktop-first responsive layout; mobile is out of scope for V1.
-- EF Core migrations MUST be explicit — no `AutoMigrate`. Migrations are committed and
-  reviewed as part of feature PRs.
-- No Teams webinar publish/sync API integration (removed; installs do not require Teams
-  webinar app registration consent).
+- No new runtime dependency may be introduced without explicit product and review justification.
+- Feature work MUST remain within the current architecture and not bypass established feature boundaries.
+- V1 delivery prioritizes correctness, accessibility, and maintainability over speculative optimization.
+- Migrations and schema changes MUST be reviewed and versioned with clear validation evidence.
+- No undocumented security or privacy exceptions are permitted.
 
 ## Development Workflow
 
 ### Agent Routing
 
-Agents are the authoritative implementation paths. Direct edits without the appropriate agent
-SHOULD include a comment explaining the bypass.
+Agents are the authoritative implementation paths for feature work.
 
 | Task | Assigned Agent |
 |---|---|
-| Feature spec authoring (functional / technical) | `spec-driven-development` |
-| General board CRUD, sprint planning, task/bug | `devops-workitem-manager` |
-| TDD, test-first, regression coverage | `edgefront-tdd-engineer` |
-| Backend API endpoints, DTOs, schema/migrations | `aspnet-api-expert` |
-| Frontend UI/UX, accessibility, composition | `ui-ux-nextjs` |
-| Structured logging, observability, SRE | `observability-sre` |
-| Cross-stack integration, API contract alignment | `fullstack-integration` |
-| CI/CD workflows, deployment safety, rollback | `cicd-devops` |
-| Constitution amendments, speckit templates | `speckit.constitution` |
+| Feature spec authoring | `spec-driven-development` |
+| Board and planning tasks | `devops-workitem-manager` |
+| TDD and regression coverage | `edgefront-tdd-engineer` |
+| Backend API and data work | `aspnet-api-expert` |
+| Frontend UX and accessibility | `ui-ux-nextjs` |
+| Observability and diagnostics | `observability-sre` |
+| Cross-stack integration | `fullstack-integration` |
+| CI/CD and release safety | `cicd-devops` |
+| Constitution amendments | `speckit.constitution` |
 
 ### Quality Gates
 
 All pull requests MUST satisfy the following before merge:
 
-1. **Build**: `dotnet build` (backend, `src/backend`) and `npm run build` (frontend,
-   `src/frontend`) complete without errors or warnings.
-2. **Lint**: `npm run lint` (frontend) produces zero errors.
-3. **Tests**: All backend xUnit tests pass (`dotnet test`). New or changed functionality
-   MUST have tests. PRs without tests MUST include documented justification.
-4. **Constitution Check**: The PR author MUST confirm no principle in this constitution is
-   violated. Violations require documented justification or a prior constitution amendment.
-5. **Ecosystem Congruency**: After any dependency, structure, script, or domain-rule change,
-   verify `.github/copilot-instructions.md`, `.github/instructions/`, `.github/agents/`, and
-   `.github/skills/` still accurately reflect reality.
+1. Build and lint commands for the changed stack MUST complete successfully.
+2. Relevant automated tests MUST pass for all touched behavior.
+3. New or changed functionality MUST include validation evidence tied to the affected user journey.
+4. UX and accessibility regressions MUST be reviewed before approval.
+5. Performance-sensitive changes MUST provide a documented impact assessment.
+6. The constitution check MUST confirm no principle violation unless a documented exception is approved.
 
 ### Amendment Procedure
 
-- **PATCH** (clarifications, wording, typo fixes): single-reviewer PR approval.
-- **MINOR** (new principle, new section, materially expanded guidance): two-reviewer PR
-  approval with written rationale.
-- **MAJOR** (principle removal or redefinition, incompatible governance change): team
-  discussion required; rationale and migration plan MUST be documented in the PR body;
-  active in-flight feature work affected by the change MUST be assessed.
-- All amendments MUST be executed via the `speckit.constitution` agent command to ensure
-  template propagation and correct semantic version increment.
+- PATCH changes require single-reviewer approval for clarification or wording updates.
+- MINOR changes require two-reviewer approval for new guidance or expanded requirements.
+- MAJOR changes require explicit team review and migration planning for incompatible or removed rules.
+- All amendments MUST be executed through the `speckit.constitution` workflow to maintain version
+  tracking and template consistency.
 
 ## Governance
 
-This constitution supersedes all other project practices and ad hoc agreements. When conflicts
-arise between this document and any other guidance file, the constitution takes precedence.
+This constitution governs feature delivery, code review, and release readiness. When conflicts arise
+between this document and other guidance, the constitution takes precedence.
 
-- All PRs and code reviews MUST verify compliance with the Core Principles.
-- Complexity violations (e.g., adding a new framework, breaking slice isolation) MUST be
-  justified in the Complexity Tracking table of the relevant feature `plan.md`.
-- The `speckit.constitution` agent command is the canonical mechanism for proposing and
-  ratifying amendments. Manual edits to this file bypass version tracking and MUST be
-  accompanied by a manual version increment and Sync Impact Report update.
-- Compliance is reviewed at each spec approval gate (before an Epic moves to `Active`) and
-  at each PR merge gate.
-- The Spec Kit runtime guidance lives in `.github/copilot-instructions.md`,
-  `.github/instructions/`, and `.github/agents/`.
+- All pull requests and code reviews MUST verify compliance with the Core Principles.
+- Feature work that violates any governing principle MUST include documented rationale and approval
+  before merge.
+- The `speckit.constitution` workflow is the canonical mechanism for updating this document.
+- Compliance review occurs at spec approval, pull request review, and release validation.
+- This document is the governing baseline for quality, testing, UX, performance, and safety.
 
-**Version**: 1.0.0 | **Ratified**: 2026-07-21 | **Last Amended**: 2026-07-21
+**Version**: 1.1.0 | **Ratified**: 2026-07-21 | **Last Amended**: 2026-08-13
