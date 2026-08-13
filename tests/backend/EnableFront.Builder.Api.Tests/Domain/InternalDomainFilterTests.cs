@@ -1,7 +1,7 @@
-using EdgeFront.Builder.Domain;
+using EnableFront.Builder.Domain;
 using FluentAssertions;
 
-namespace EdgeFront.Builder.Tests.Domain;
+namespace EnableFront.Builder.Api.Tests.Domain;
 
 public class InternalDomainFilterTests
 {

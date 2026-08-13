@@ -1,4 +1,4 @@
-namespace EdgeFront.Builder.Domain;
+namespace EnableFront.Builder.Domain;
 
 public static class DomainNormalizer
 {

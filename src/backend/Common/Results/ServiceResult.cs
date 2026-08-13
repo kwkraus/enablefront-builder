@@ -1,4 +1,4 @@
-namespace EdgeFront.Builder.Common.Results;
+namespace EnableFront.Builder.Common.Results;
 
 public sealed class ServiceResult<T>
 {

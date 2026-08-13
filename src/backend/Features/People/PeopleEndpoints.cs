@@ -1,8 +1,8 @@
-using EdgeFront.Builder.Common;
-using EdgeFront.Builder.Common.Extensions;
-using EdgeFront.Builder.Infrastructure.Graph;
+using EnableFront.Builder.Common;
+using EnableFront.Builder.Common.Extensions;
+using EnableFront.Builder.Infrastructure.Graph;
 
-namespace EdgeFront.Builder.Features.People;
+namespace EnableFront.Builder.Features.People;
 
 public static class PeopleEndpoints
 {

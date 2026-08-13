@@ -1,11 +1,11 @@
-using EdgeFront.Builder.Domain.Entities;
-using EdgeFront.Builder.Features.Sessions;
-using EdgeFront.Builder.Features.Sessions.Dtos;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Domain.Entities;
+using EnableFront.Builder.Features.Sessions;
+using EnableFront.Builder.Features.Sessions.Dtos;
+using EnableFront.Builder.Infrastructure.Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace EdgeFront.Builder.Tests.Features.Sessions;
+namespace EnableFront.Builder.Api.Tests.Features.Sessions;
 
 public class SessionServiceTests : IDisposable
 {
@@ -534,7 +534,7 @@ public class SessionServiceTests : IDisposable
 
     // ---------- Helpers ----------
 
-    private EdgeFront.Builder.Domain.Entities.Series BuildSeries(string? ownerOverride = null) =>
+    private EnableFront.Builder.Domain.Entities.Series BuildSeries(string? ownerOverride = null) =>
         new()
         {
             SeriesId = Guid.NewGuid(),

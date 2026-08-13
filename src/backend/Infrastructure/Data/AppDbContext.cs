@@ -1,10 +1,9 @@
-using EdgeFront.Builder.Domain;
-using EdgeFront.Builder.Domain.Entities;
+using EnableFront.Builder.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
 
-namespace EdgeFront.Builder.Infrastructure.Data;
+namespace EnableFront.Builder.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {

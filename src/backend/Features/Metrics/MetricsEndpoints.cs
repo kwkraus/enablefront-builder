@@ -1,7 +1,7 @@
-using EdgeFront.Builder.Common;
-using EdgeFront.Builder.Common.Extensions;
+using EnableFront.Builder.Common;
+using EnableFront.Builder.Common.Extensions;
 
-namespace EdgeFront.Builder.Features.Metrics;
+namespace EnableFront.Builder.Features.Metrics;
 
 public static class MetricsEndpoints
 {

@@ -1,7 +1,7 @@
-using EdgeFront.Builder.Common.Extensions;
-using EdgeFront.Builder.Infrastructure.Graph;
+using EnableFront.Builder.Common.Extensions;
+using EnableFront.Builder.Infrastructure.Graph;
 
-namespace EdgeFront.Builder.Features.Me;
+namespace EnableFront.Builder.Features.Me;
 
 public static class MeEndpoints
 {

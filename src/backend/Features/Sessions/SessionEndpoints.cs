@@ -1,8 +1,8 @@
-using EdgeFront.Builder.Common;
-using EdgeFront.Builder.Common.Extensions;
-using EdgeFront.Builder.Features.Sessions.Dtos;
+using EnableFront.Builder.Common;
+using EnableFront.Builder.Common.Extensions;
+using EnableFront.Builder.Features.Sessions.Dtos;
 
-namespace EdgeFront.Builder.Features.Sessions;
+namespace EnableFront.Builder.Features.Sessions;
 
 public static class SessionEndpoints
 {

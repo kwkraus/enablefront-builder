@@ -1,8 +1,8 @@
-using EdgeFront.Builder.Common;
-using EdgeFront.Builder.Common.Extensions;
-using EdgeFront.Builder.Features.Series.Dtos;
+using EnableFront.Builder.Common;
+using EnableFront.Builder.Common.Extensions;
+using EnableFront.Builder.Features.Series.Dtos;
 
-namespace EdgeFront.Builder.Features.Series;
+namespace EnableFront.Builder.Features.Series;
 
 public static class SeriesEndpoints
 {

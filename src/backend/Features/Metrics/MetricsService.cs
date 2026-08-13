@@ -1,8 +1,8 @@
-using EdgeFront.Builder.Features.Metrics.Dtos;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Features.Metrics.Dtos;
+using EnableFront.Builder.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace EdgeFront.Builder.Features.Metrics;
+namespace EnableFront.Builder.Features.Metrics;
 
 public class MetricsService
 {

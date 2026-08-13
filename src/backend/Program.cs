@@ -1,12 +1,12 @@
-using EdgeFront.Builder.Domain;
-using EdgeFront.Builder.Features.Export;
-using EdgeFront.Builder.Features.Me;
-using EdgeFront.Builder.Features.Metrics;
-using EdgeFront.Builder.Features.People;
-using EdgeFront.Builder.Features.Series;
-using EdgeFront.Builder.Features.Sessions;
-using EdgeFront.Builder.Infrastructure.Data;
-using EdgeFront.Builder.Infrastructure.Graph;
+using EnableFront.Builder.Domain;
+using EnableFront.Builder.Features.Export;
+using EnableFront.Builder.Features.Me;
+using EnableFront.Builder.Features.Metrics;
+using EnableFront.Builder.Features.People;
+using EnableFront.Builder.Features.Series;
+using EnableFront.Builder.Features.Sessions;
+using EnableFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Infrastructure.Graph;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
@@ -17,7 +17,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddApplicationInsightsTelemetry();
+
+var appInsightsConnectionString =
+    builder.Configuration["ApplicationInsights:ConnectionString"]
+    ?? builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
+{
+    builder.Services.AddApplicationInsightsTelemetry();
+}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

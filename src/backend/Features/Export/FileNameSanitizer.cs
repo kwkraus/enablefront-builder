@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace EdgeFront.Builder.Features.Export;
+namespace EnableFront.Builder.Features.Export;
 
 /// <summary>
 /// Provides static helpers for converting arbitrary series titles into

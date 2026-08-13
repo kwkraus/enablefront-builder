@@ -1,3 +1,3 @@
-namespace EdgeFront.Builder.Features.Sessions.Dtos;
+namespace EnableFront.Builder.Features.Sessions.Dtos;
 
 public record PersonSummary(string DisplayName, string Email);

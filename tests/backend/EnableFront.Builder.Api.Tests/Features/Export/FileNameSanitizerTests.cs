@@ -1,7 +1,7 @@
-using EdgeFront.Builder.Features.Export;
+using EnableFront.Builder.Features.Export;
 using FluentAssertions;
 
-namespace EdgeFront.Builder.Tests.Features.Export;
+namespace EnableFront.Builder.Api.Tests.Features.Export;
 
 public class FileNameSanitizerTests
 {
@@ -31,16 +31,16 @@ public class FileNameSanitizerTests
     // ── 3. All special filesystem chars replaced, consecutive hyphens collapsed
 
     [Theory]
-    [InlineData(@"A/B",       "A-B.md")]       // forward slash
-    [InlineData(@"A\B",       "A-B.md")]       // back slash
-    [InlineData("A:B",        "A-B.md")]       // colon
-    [InlineData("A*B",        "A-B.md")]       // asterisk
-    [InlineData("A?B",        "A-B.md")]       // question mark
-    [InlineData("A\"B",       "A-B.md")]       // double quote
-    [InlineData("A<B",        "A-B.md")]       // less-than
-    [InlineData("A>B",        "A-B.md")]       // greater-than
-    [InlineData("A|B",        "A-B.md")]       // pipe
-    [InlineData(@"A/B\C:D",   "A-B-C-D.md")]  // multiple different specials
+    [InlineData(@"A/B", "A-B.md")]       // forward slash
+    [InlineData(@"A\B", "A-B.md")]       // back slash
+    [InlineData("A:B", "A-B.md")]       // colon
+    [InlineData("A*B", "A-B.md")]       // asterisk
+    [InlineData("A?B", "A-B.md")]       // question mark
+    [InlineData("A\"B", "A-B.md")]       // double quote
+    [InlineData("A<B", "A-B.md")]       // less-than
+    [InlineData("A>B", "A-B.md")]       // greater-than
+    [InlineData("A|B", "A-B.md")]       // pipe
+    [InlineData(@"A/B\C:D", "A-B-C-D.md")]  // multiple different specials
     public void Sanitize_ReplacesSpecialChars_WithHyphens(string input, string expected)
     {
         FileNameSanitizer.Sanitize(input).Should().Be(expected);

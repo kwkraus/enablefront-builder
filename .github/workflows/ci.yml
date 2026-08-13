@@ -29,7 +29,7 @@ jobs:
         run: dotnet build --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test tests/backend/EdgeFront.Builder.Tests/EdgeFront.Builder.Tests.csproj --configuration Release --verbosity normal
+        run: dotnet test tests/backend/EnableFront.Builder.Api.Tests/EnableFront.Builder.Api.Tests.csproj --configuration Release --verbosity normal
         working-directory: ${{ github.workspace }}
 
   frontend:

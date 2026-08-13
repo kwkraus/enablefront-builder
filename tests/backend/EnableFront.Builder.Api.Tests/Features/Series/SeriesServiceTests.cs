@@ -1,11 +1,11 @@
-using EdgeFront.Builder.Domain.Entities;
-using EdgeFront.Builder.Features.Series;
-using EdgeFront.Builder.Features.Series.Dtos;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Domain.Entities;
+using EnableFront.Builder.Features.Series;
+using EnableFront.Builder.Features.Series.Dtos;
+using EnableFront.Builder.Infrastructure.Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace EdgeFront.Builder.Tests.Features.Series;
+namespace EnableFront.Builder.Api.Tests.Features.Series;
 
 public class SeriesServiceTests : IDisposable
 {
@@ -254,7 +254,7 @@ public class SeriesServiceTests : IDisposable
 
     // ---------- Helpers ----------
 
-    private static EdgeFront.Builder.Domain.Entities.Series BuildSeries(string title, string owner) =>
+    private static EnableFront.Builder.Domain.Entities.Series BuildSeries(string title, string owner) =>
         new()
         {
             SeriesId = Guid.NewGuid(),

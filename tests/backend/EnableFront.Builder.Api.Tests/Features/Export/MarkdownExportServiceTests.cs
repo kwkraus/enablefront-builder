@@ -1,10 +1,10 @@
-using EdgeFront.Builder.Domain.Entities;
-using EdgeFront.Builder.Features.Export;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Domain.Entities;
+using EnableFront.Builder.Features.Export;
+using EnableFront.Builder.Infrastructure.Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace EdgeFront.Builder.Tests.Features.Export;
+namespace EnableFront.Builder.Api.Tests.Features.Export;
 
 public class MarkdownExportServiceTests : IDisposable
 {
@@ -227,11 +227,11 @@ public class MarkdownExportServiceTests : IDisposable
         _db.SessionPresenters.Add(new SessionPresenter
         {
             SessionPresenterId = Guid.NewGuid(),
-            SessionId          = session.SessionId,
-            EntraUserId        = "entra-secret",
-            DisplayName        = "Visible Name Only",
-            Email              = sensitiveEmail,
-            CreatedAt          = DateTime.UtcNow
+            SessionId = session.SessionId,
+            EntraUserId = "entra-secret",
+            DisplayName = "Visible Name Only",
+            Email = sensitiveEmail,
+            CreatedAt = DateTime.UtcNow
         });
         await _db.SaveChangesAsync();
 
@@ -264,12 +264,12 @@ public class MarkdownExportServiceTests : IDisposable
 
         var session = new Session
         {
-            SessionId    = Guid.NewGuid(),
-            SeriesId     = series.SeriesId,
-            OwnerUserId  = OwnerUserId,
-            Title        = "Unscheduled Session",
-            StartsAt     = unset,
-            EndsAt       = unset
+            SessionId = Guid.NewGuid(),
+            SeriesId = series.SeriesId,
+            OwnerUserId = OwnerUserId,
+            Title = "Unscheduled Session",
+            StartsAt = unset,
+            EndsAt = unset
         };
         _db.Sessions.Add(session);
         await _db.SaveChangesAsync();
@@ -288,16 +288,16 @@ public class MarkdownExportServiceTests : IDisposable
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    private EdgeFront.Builder.Domain.Entities.Series BuildSeries(
+    private EnableFront.Builder.Domain.Entities.Series BuildSeries(
         string title,
         string? ownerOverride = null) =>
         new()
         {
-            SeriesId    = Guid.NewGuid(),
+            SeriesId = Guid.NewGuid(),
             OwnerUserId = ownerOverride ?? OwnerUserId,
-            Title       = title,
-            CreatedAt   = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc),
-            UpdatedAt   = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc)
+            Title = title,
+            CreatedAt = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc),
+            UpdatedAt = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc)
         };
 
     private static Session BuildSession(
@@ -308,12 +308,12 @@ public class MarkdownExportServiceTests : IDisposable
         var start = startsAt ?? new DateTime(2025, 6, 1, 9, 0, 0, DateTimeKind.Utc);
         return new Session
         {
-            SessionId       = Guid.NewGuid(),
-            SeriesId        = seriesId,
-            OwnerUserId     = OwnerUserId,
-            Title           = title,
-            StartsAt        = start,
-            EndsAt          = start.AddHours(1)
+            SessionId = Guid.NewGuid(),
+            SeriesId = seriesId,
+            OwnerUserId = OwnerUserId,
+            Title = title,
+            StartsAt = start,
+            EndsAt = start.AddHours(1)
         };
     }
 }

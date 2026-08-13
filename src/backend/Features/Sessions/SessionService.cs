@@ -1,10 +1,9 @@
-using EdgeFront.Builder.Domain.Entities;
-using EdgeFront.Builder.Features.People;
-using EdgeFront.Builder.Features.Sessions.Dtos;
-using EdgeFront.Builder.Infrastructure.Data;
+using EnableFront.Builder.Domain.Entities;
+using EnableFront.Builder.Features.Sessions.Dtos;
+using EnableFront.Builder.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace EdgeFront.Builder.Features.Sessions;
+namespace EnableFront.Builder.Features.Sessions;
 
 public class SessionService
 {
