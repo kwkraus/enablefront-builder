@@ -1,6 +1,6 @@
 # Agentic Workflows
 
-EdgeFront Builder uses GitHub Copilot agentic workflows to automate routine maintenance tasks. These workflows run on a schedule and use an AI agent to perform work that would otherwise require manual effort.
+EnableFront Builder uses GitHub Copilot agentic workflows to automate routine maintenance tasks. These workflows run on a schedule and use an AI agent to perform work that would otherwise require manual effort.
 
 Workflow definitions live in `.github/workflows/` and follow the `*.md` convention used by the [gh-aw](https://github.com/github/gh-aw) runner. Each workflow has a companion `*.lock.yml` file generated at compile time.
 

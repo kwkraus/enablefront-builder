@@ -24,7 +24,7 @@ export default function AppHeader() {
           href="/series"
           style={{ fontSize: '1rem', fontWeight: 600 }}
         >
-          EdgeFront Builder
+          EnableFront Builder
         </Header.Link>
       </Header.Item>
 

@@ -5,7 +5,7 @@ import { LoadingSkeleton } from '@/components/loading-skeleton'
 import SeriesListContent from '@/components/series-list-content'
 
 export const metadata = {
-  title: 'Series — EdgeFront Builder',
+  title: 'Series — EnableFront Builder',
 }
 
 /**

@@ -35,7 +35,7 @@ Follow-up TODOs:
   - None.
 -->
 
-# EdgeFront Builder Constitution
+# EnableFront Builder Constitution
 
 ## Core Principles
 
@@ -156,7 +156,7 @@ Agents are the authoritative implementation paths for feature work.
 |---|---|
 | Feature spec authoring | `spec-driven-development` |
 | Board and planning tasks | `devops-workitem-manager` |
-| TDD and regression coverage | `edgefront-tdd-engineer` |
+| TDD and regression coverage | `frontend-backend-tdd-engineer` |
 | Backend API and data work | `aspnet-api-expert` |
 | Frontend UX and accessibility | `ui-ux-nextjs` |
 | Observability and diagnostics | `observability-sre` |

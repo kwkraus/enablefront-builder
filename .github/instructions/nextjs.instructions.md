@@ -8,7 +8,7 @@ applyTo: "src/frontend/**"
 Applies to `src/frontend`. Shared rules (architecture, build/test, congruency check) live in `copilot-instructions.md`.
 
 ## Agent Routing
-- Testing → `edgefront-tdd-engineer`
+- Testing → `frontend-backend-tdd-engineer`
 - UX/composition → `ui-ux-nextjs`
 - Accessibility → `frontend-accessibility-and-ux-acceptance` skill via `ui-ux-nextjs`
 - Ask when requirements are unclear.

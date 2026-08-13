@@ -106,7 +106,7 @@ export default function NewSessionPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onBlur={() => setTouched(true)}
-            placeholder="e.g. Intro to EdgeFront"
+            placeholder="e.g. Intro to EnableFront"
             block
             autoFocus
             validationStatus={titleError ? 'error' : undefined}

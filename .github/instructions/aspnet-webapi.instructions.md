@@ -8,7 +8,7 @@ applyTo: "src/backend/**"
 Applies to `src/backend`. Shared rules (architecture, build/test, congruency check) live in `copilot-instructions.md`.
 
 ## Agent Routing
-- Testing → `edgefront-tdd-engineer`
+- Testing → `frontend-backend-tdd-engineer`
 - Logging/observability → `observability-sre`
 - Graph (delegated OBO user lookup) → `aspnet-api-expert`
 - Schema/migrations → `data-schema-migration` skill via `aspnet-api-expert`

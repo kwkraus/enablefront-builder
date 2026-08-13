@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Updates the EdgeFront Builder Entra ID app registration with required delegated permissions for SPEC-210.
+    Updates the EnableFront Builder Entra ID app registration with required delegated permissions for SPEC-210.
 
 .DESCRIPTION
     Adds User.ReadBasic.All and User.Read delegated permissions to the app registration and grants admin consent.
@@ -12,7 +12,7 @@
     - The --allow-no-subscriptions flag is used because this tenant has no Azure subscription
 
 .PARAMETER AppId
-    The Application (client) ID of the EdgeFront Builder app registration.
+    The Application (client) ID of the EnableFront Builder app registration.
 
 .EXAMPLE
     .\update-app-registration.ps1 -AppId "your-client-id-here"
@@ -38,7 +38,7 @@ $Permissions = @{
 }
 
 Write-Host ""
-Write-Host "=== EdgeFront Builder — Entra App Registration Update ===" -ForegroundColor Cyan
+Write-Host "=== EnableFront Builder — Entra App Registration Update ===" -ForegroundColor Cyan
 Write-Host "App ID:  $AppId"
 Write-Host "Tenant:  $Tenant"
 Write-Host ""
