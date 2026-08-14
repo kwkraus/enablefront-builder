@@ -42,6 +42,13 @@ Do not use plugin TDD agents (`testing-automation:tdd-*`) unless user asks by na
 
 Verify scripts exist in the relevant manifest before running.
 
+## Security Scanning
+
+`.github/workflows/opengrep.yml` runs OpenGrep (SAST) on every PR to `main`. It is
+advisory-only (`continue-on-error: true`) — reports to the Security tab but never blocks
+merge. Plain Actions workflow, not a `gh-aw` agentic workflow. Details:
+`docs/opengrep-scanning.md`.
+
 ## Conventions
 - Discovery-first: check `readme.md` and local manifests before editing.
 - Small, reversible edits; don't reformat unrelated code.

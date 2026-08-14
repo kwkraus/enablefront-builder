@@ -1,0 +1,89 @@
+name: OpenGrep Security Scan
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: opengrep-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  # Bump these together and re-verify locally; see docs/opengrep-scanning.md.
+  OPENGREP_VERSION: v1.27.1
+  RULES_REPO: https://github.com/semgrep/semgrep-rules.git
+  RULES_COMMIT: 40b8c63f75dc7c22c8a77482d73bfb864b146f7e
+
+jobs:
+  opengrep:
+    name: OpenGrep — SAST scan (advisory)
+    runs-on: ubuntu-latest
+    # Advisory-only rollout: findings are reported to the Security tab but never
+    # block the PR check. Any step failure surfaces as a visible warning instead
+    # of a red X. Revisit once the team has triaged an initial batch of findings.
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v4.1.2
+
+      - name: Install OpenGrep CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh \
+            | bash -s -- -v "${OPENGREP_VERSION}" --verify-signatures
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Fetch rule set (semgrep-rules, pinned)
+        run: |
+          git clone --filter=blob:none --no-checkout "${RULES_REPO}" "${RUNNER_TEMP}/semgrep-rules"
+          git -C "${RUNNER_TEMP}/semgrep-rules" sparse-checkout set csharp javascript typescript generic/secrets generic/ci
+          git -C "${RUNNER_TEMP}/semgrep-rules" checkout "${RULES_COMMIT}"
+
+      - name: Run OpenGrep scan
+        run: |
+          opengrep scan \
+            --config "${RUNNER_TEMP}/semgrep-rules/csharp" \
+            --config "${RUNNER_TEMP}/semgrep-rules/javascript" \
+            --config "${RUNNER_TEMP}/semgrep-rules/typescript" \
+            --config "${RUNNER_TEMP}/semgrep-rules/generic/secrets" \
+            --config "${RUNNER_TEMP}/semgrep-rules/generic/ci" \
+            --disable-version-check \
+            --sarif-output=opengrep-results.sarif \
+            .
+
+      - name: Summarize findings
+        if: always()
+        run: |
+          {
+            echo "### OpenGrep scan summary";
+            if [ -f opengrep-results.sarif ]; then
+              count=$(jq '[.runs[].results[]] | length' opengrep-results.sarif)
+              echo "Found **${count}** finding(s). This check is advisory-only and does not block merge.";
+              echo "See the [Security tab](${{ github.server_url }}/${{ github.repository }}/security/code-scanning) for details.";
+            else
+              echo "No SARIF output was produced — the scan step likely failed. Check the job logs.";
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload SARIF artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: opengrep-results
+          path: opengrep-results.sarif
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload SARIF to code scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: opengrep-results.sarif
+          category: opengrep

@@ -1,0 +1,9 @@
+# OpenGrep-specific ignores (in addition to normal .gitignore filtering).
+# See docs/opengrep-scanning.md for context.
+
+# EF Core migrations are generated code, not hand-written application logic.
+src/backend/Migrations/
+
+# Playwright run artifacts (screenshots, traces, HTML reports) — not source code.
+src/frontend/test-results/
+src/frontend/playwright-report/
