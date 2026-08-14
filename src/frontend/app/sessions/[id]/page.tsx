@@ -11,7 +11,6 @@ import { ErrorBanner } from '@/components/error-banner'
 import { MetricsPanel } from '@/components/metrics-panel'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { InlineEditableTitle } from '@/components/inline-editable-title'
-import { PeoplePicker } from '@/components/people-picker'
 import { SessionSchedulePicker } from '@/components/session-schedule-picker'
 
 import {
@@ -19,11 +18,9 @@ import {
   updateSession,
   updateSessionTitle,
   deleteSession,
-  setSessionPresenters,
-  setSessionCoordinators,
 } from '@/lib/api/sessions'
 import { getSessionMetrics } from '@/lib/api/metrics'
-import type { SessionResponse, SessionMetricsResponse, PersonInput } from '@/lib/api/types'
+import type { SessionResponse, SessionMetricsResponse } from '@/lib/api/types'
 
 function toDate(iso: string | null | undefined): Date | null {
   if (!iso) return null
@@ -57,20 +54,6 @@ export default function SessionDetailPage() {
       setTitle(s.title)
       setStartsAtDate(toDate(s.startsAt))
       setEndsAtDate(toDate(s.endsAt))
-      setPresenters(
-        s.presenters.map((p) => ({
-          entraUserId: p.entraUserId,
-          displayName: p.displayName,
-          email: p.email,
-        })),
-      )
-      setCoordinators(
-        s.coordinators.map((c) => ({
-          entraUserId: c.entraUserId,
-          displayName: c.displayName,
-          email: c.email,
-        })),
-      )
     } catch (err) {
       setLoadError(err instanceof Error ? err.message : 'Failed to load session')
     } finally {
@@ -85,8 +68,6 @@ export default function SessionDetailPage() {
   const [title, setTitle] = useState('')
   const [startsAtDate, setStartsAtDate] = useState<Date | null>(null)
   const [endsAtDate, setEndsAtDate] = useState<Date | null>(null)
-  const [presenters, setPresenters] = useState<PersonInput[]>([])
-  const [coordinators, setCoordinators] = useState<PersonInput[]>([])
   const [touched, setTouched] = useState(false)
 
   const titleError = touched && !title.trim() ? 'Title is required' : null
@@ -135,8 +116,6 @@ export default function SessionDetailPage() {
         },
         token,
       )
-      await setSessionPresenters(id, presenters, token)
-      await setSessionCoordinators(id, coordinators, token)
       router.push(`/series/${session?.seriesId}`)
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Save failed'
@@ -267,7 +246,7 @@ export default function SessionDetailPage() {
       )}
 
       <form onSubmit={handleSave} noValidate className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-6">
           <section className="rounded-lg border p-6 space-y-4" style={{ backgroundColor: 'var(--bgColor-default, var(--color-canvas-default))' }}>
             <h2 className="text-base font-semibold">Schedule</h2>
 
@@ -284,30 +263,6 @@ export default function SessionDetailPage() {
               </p>
             )}
           </section>
-
-          <div className="space-y-6">
-            <section className="rounded-lg border p-6 space-y-3" style={{ backgroundColor: 'var(--bgColor-default, var(--color-canvas-default))' }}>
-              <h2 className="text-base font-semibold">Presenters</h2>
-              <PeoplePicker
-                label="Presenters"
-                hideLabel
-                value={presenters}
-                onChange={setPresenters}
-                disabled={saveLoading}
-              />
-            </section>
-
-            <section className="rounded-lg border p-6 space-y-3" style={{ backgroundColor: 'var(--bgColor-default, var(--color-canvas-default))' }}>
-              <h2 className="text-base font-semibold">Coordinators</h2>
-              <PeoplePicker
-                label="Coordinators"
-                hideLabel
-                value={coordinators}
-                onChange={setCoordinators}
-                disabled={saveLoading}
-              />
-            </section>
-          </div>
         </div>
 
         <div className="flex items-center justify-between">

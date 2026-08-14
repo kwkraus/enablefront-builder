@@ -23,16 +23,7 @@ export interface SessionListItem {
   endsAt: string
   totalRegistrations: number
   totalAttendees: number
-  presenterCount: number
-  coordinatorCount: number
   ownerDisplayName: string
-  presenters: PersonSummary[]
-  coordinators: PersonSummary[]
-}
-
-export interface PersonSummary {
-  displayName: string
-  email: string
 }
 
 export interface SessionResponse {
@@ -41,34 +32,6 @@ export interface SessionResponse {
   title: string
   startsAt: string
   endsAt: string
-  presenters: SessionPresenterDto[]
-  coordinators: SessionCoordinatorDto[]
-}
-
-export interface PersonSearchResult {
-  entraUserId: string
-  displayName: string
-  email: string
-}
-
-export interface SessionPresenterDto {
-  sessionPresenterId: string
-  entraUserId: string
-  displayName: string
-  email: string
-}
-
-export interface SessionCoordinatorDto {
-  sessionCoordinatorId: string
-  entraUserId: string
-  displayName: string
-  email: string
-}
-
-export interface PersonInput {
-  entraUserId: string
-  displayName: string
-  email: string
 }
 
 export interface SeriesMetricsResponse {

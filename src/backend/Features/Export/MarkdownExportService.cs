@@ -13,7 +13,6 @@ namespace EnableFront.Builder.Features.Export;
 /// <list type="bullet">
 ///   <item>Series: <c>Title</c>, <c>CreatedAt</c></item>
 ///   <item>Session: <c>Title</c>, <c>StartsAt</c>, <c>EndsAt</c></item>
-///   <item>Presenters / Coordinators: <c>DisplayName</c> only</item>
 /// </list>
 /// <para>Fields that are deliberately <em>excluded</em>:
 /// <c>Email</c>, <c>EntraUserId</c>,
@@ -75,32 +74,7 @@ public sealed class MarkdownExportService
             })
             .ToListAsync(cancellationToken);
 
-        // ── 3. Fetch presenters & coordinators (DisplayName only) ────────────────
-        // Materialise all rows first, then group client-side to avoid EF Core
-        // GroupBy-to-SQL translation ambiguity when projecting to a list.
-        var sessionIds = sessions.Select(s => s.SessionId).ToList();
-
-        // Presenters — project away Email and EntraUserId at the query level.
-        var presenterRows = await _db.SessionPresenters
-            .Where(p => sessionIds.Contains(p.SessionId))
-            .Select(p => new { p.SessionId, p.DisplayName })   // Email / EntraUserId intentionally excluded
-            .ToListAsync(cancellationToken);
-
-        var presentersBySession = presenterRows
-            .GroupBy(p => p.SessionId)
-            .ToDictionary(g => g.Key, g => g.Select(p => p.DisplayName).ToList());
-
-        // Coordinators — same allow-list as presenters.
-        var coordinatorRows = await _db.SessionCoordinators
-            .Where(c => sessionIds.Contains(c.SessionId))
-            .Select(c => new { c.SessionId, c.DisplayName })   // Email / EntraUserId intentionally excluded
-            .ToListAsync(cancellationToken);
-
-        var coordinatorsBySession = coordinatorRows
-            .GroupBy(c => c.SessionId)
-            .ToDictionary(g => g.Key, g => g.Select(c => c.DisplayName).ToList());
-
-        // ── 4. Build the markdown document ──────────────────────────────────────
+        // ── 3. Build the markdown document ──────────────────────────────────────
         var sb = new StringBuilder();
 
         // Document header
@@ -140,20 +114,6 @@ public sealed class MarkdownExportService
                     sb.AppendLine("- **Schedule:** Not yet set");
                 }
 
-                // Presenters — omit entire line when none are assigned.
-                if (presentersBySession.TryGetValue(session.SessionId, out var presenters)
-                    && presenters.Count > 0)
-                {
-                    sb.AppendLine($"- **Presenters:** {string.Join(", ", presenters)}");
-                }
-
-                // Coordinators — omit entire line when none are assigned.
-                if (coordinatorsBySession.TryGetValue(session.SessionId, out var coordinators)
-                    && coordinators.Count > 0)
-                {
-                    sb.AppendLine($"- **Coordinators:** {string.Join(", ", coordinators)}");
-                }
-
                 sb.AppendLine();
                 sb.AppendLine("---");
                 sb.AppendLine();
@@ -165,10 +125,10 @@ public sealed class MarkdownExportService
         sb.AppendLine();
         sb.Append($"*Exported from EnableFront Builder on {DateTime.UtcNow:MMMM d, yyyy}*");
 
-        // ── 5. Generate the sanitized filename ──────────────────────────────────
+        // ── 4. Generate the sanitized filename ──────────────────────────────────
         var fileName = FileNameSanitizer.Sanitize(series.Title);
 
-        // ── 6. Return the result ─────────────────────────────────────────────────
+        // ── 5. Return the result ─────────────────────────────────────────────────
         return new MarkdownExportResult(fileName, sb.ToString());
     }
 }
