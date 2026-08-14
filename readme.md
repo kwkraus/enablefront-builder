@@ -8,8 +8,7 @@ EnableFront Builder is a **webinar management platform** for local event plannin
 
 ## Key Capabilities
 
-- **Series & session management** — Create webinar series containing multiple sessions; manage titles, schedules, presenters, and coordinators.
-- **People roles** — Assign presenters and co-organizers per session using a live Entra ID people picker.
+- **Series & session management** — Create webinar series containing multiple sessions; manage titles and schedules.
 - **Registration & attendance tracking** — Stores normalized registration and attendance records received from external ingestion sources into the local data model.
 - **Metrics & analytics** — Aggregated engagement metrics per session and across a series: total registrations, attendees, unique account domains, and warm-account influence tracking.
 - **Entra ID authentication** — Single-tenant login via Entra ID.
@@ -60,7 +59,7 @@ EnableFront Builder is a **webinar management platform** for local event plannin
 | Backend | ASP.NET Core Minimal API, .NET 10, EF Core |
 | Database | Azure SQL |
 | Auth | Microsoft Entra ID (next-auth, single-tenant) |
-| Graph integration | Microsoft Graph v1 — delegated user profile search |
+| Graph integration | Microsoft Graph v1 — OBO flow for signed-in user's profile photo (`/me/photo`) |
 | Hosting | Azure App Service |
 
 ---
@@ -84,7 +83,7 @@ tools/          # PowerShell scripts (e.g., Entra app registration)
 - **Monolith with modular boundaries** — vertical-slice feature organization in the backend, App Router feature directories in the frontend.
 - **Ingestion-ready data model** — normalized registration and attendance records are persisted locally and remain the foundation for follow-on ingestion work.
 - **Metrics persisted on write** — all metric aggregations are computed and stored on write; no compute-on-read.
-- **Delegated-only Graph permissions** — authenticated user context is required for supported directory lookups.
+- **Delegated-only Graph permissions** — OBO flow used exclusively to fetch the signed-in user's profile photo (`/api/v1/me/photo`); no directory search or background Graph calls.
 - **Automated security scanning** — [OpenGrep](https://github.com/opengrep/opengrep) SAST scan runs on every pull request to `master` (advisory-only). See [`docs/opengrep-scanning.md`](docs/opengrep-scanning.md).
 
 ---
@@ -102,7 +101,7 @@ Required delegated permissions:
 | Permission | Purpose |
 |---|---|
 | `openid`, `profile`, `email`, `offline_access` | Standard OIDC sign-in |
-| `User.ReadBasic.All` | People search for presenter/coordinator picker |
+| `User.Read` | Fetch signed-in user's profile photo via OBO (`/api/v1/me/photo`) |
 
 Exposed API scope: `api://{ClientId}/access_as_user` (frontend → backend token exchange).
 

@@ -11,7 +11,6 @@ This document describes the required Entra ID (Azure AD) app registration permis
 | `email` | Delegated | SPEC-200 | Email claim |
 | `offline_access` | Delegated | SPEC-200 | Refresh token for silent renewal |
 | `User.Read` | Delegated | SPEC-210 | Fetch signed-in user's profile photo via OBO (`/api/v1/me/photo`) |
-| `User.ReadBasic.All` | Delegated | SPEC-210 | Search Entra directory users for people picker |
 
 ## Exposed API Scope
 
@@ -37,9 +36,8 @@ cd tools/
 The script will:
 1. Log in to Azure CLI with `--allow-no-subscriptions` (required for tenants without an Azure subscription)
 2. Show current permissions
-3. Add `User.ReadBasic.All` delegated permission
-4. Grant admin consent
-5. Verify the final permission set
+3. Grant admin consent
+4. Verify the final permission set
 
 ### Troubleshooting
 
@@ -67,7 +65,7 @@ $App = Get-MgApplication -Filter "appId eq '$AppId'"
 3. Select your EnableFront Builder app
 4. Go to **API permissions**
 5. Click **Add a permission** → **Microsoft Graph** → **Delegated permissions**
-6. Search for and add: `User.ReadBasic.All`
+6. Search for and add: `User.Read`
 7. Click **Grant admin consent for {tenant}**
 8. Verify all permissions show ✅ green checkmarks under "Status"
 
@@ -81,4 +79,4 @@ After setup, the API permissions page should show:
 | `offline_access` | Delegated | ✅ Granted |
 | `openid` | Delegated | ✅ Granted |
 | `profile` | Delegated | ✅ Granted |
-| `User.ReadBasic.All` | Delegated | ✅ Granted |
+| `User.Read` | Delegated | ✅ Granted |
