@@ -17,8 +17,21 @@ Azure DevOps Agile **State** is the primary lifecycle signal. Tags are used only
 |-------|---------|
 | `spec-driven-development` | Orchestrates the full spec process: authoring, review readiness, approval, tech spec generation, and change management |
 | `devops-workitem-manager` | General board CRUD, sprint planning, task/bug management, and spec-aware edits |
+| `speckit.analyze` | Read-only cross-artifact consistency and quality analysis across `spec.md`, `plan.md`, and `tasks.md` after task generation |
 
 Both agents are pre-configured for organization `kkraus` and project `EnableFront Builder`.
+
+### speckit.analyze
+
+`speckit.analyze` performs a non-destructive analysis of the three core spec artifacts. It checks for inconsistencies, coverage gaps, ambiguities, and constitution violations and produces a structured report. No files are modified.
+
+Run after `/speckit.tasks` has produced a complete `tasks.md`. The agent:
+
+- Compares `spec.md`, `plan.md`, and `tasks.md` for consistency and coverage
+- Flags constitution violations as CRITICAL (constitution principles are non-negotiable within the analysis scope)
+- Offers an optional remediation plan that requires explicit user approval before any follow-up edits
+
+This agent also supports optional extension hooks registered under `hooks.before_analyze` in `.specify/extensions.yml`.
 
 ## Work Item Hierarchy
 
