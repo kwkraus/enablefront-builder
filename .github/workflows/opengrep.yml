@@ -3,6 +3,12 @@ name: OpenGrep Security Scan
 on:
   pull_request:
     branches: [master]
+  push:
+    branches: [master]
+  schedule:
+    # Weekly, off-peak/off-the-hour per GitHub's recommended pattern for
+    # third-party SARIF tools. Mondays 04:23 UTC.
+    - cron: "23 4 * * 1"
 
 permissions:
   contents: read
@@ -10,7 +16,7 @@ permissions:
   actions: read
 
 concurrency:
-  group: opengrep-${{ github.event.pull_request.number }}
+  group: opengrep-${{ github.ref }}
   cancel-in-progress: true
 
 env:

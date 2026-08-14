@@ -85,7 +85,7 @@ tools/          # PowerShell scripts (e.g., Entra app registration)
 - **Ingestion-ready data model** — normalized registration and attendance records are persisted locally and remain the foundation for follow-on ingestion work.
 - **Metrics persisted on write** — all metric aggregations are computed and stored on write; no compute-on-read.
 - **Delegated-only Graph permissions** — authenticated user context is required for supported directory lookups.
-- **Automated security scanning** — [OpenGrep](https://github.com/opengrep/opengrep) SAST scan runs on every pull request to `master` (advisory-only). See [`docs/opengrep-scanning.md`](docs/opengrep-scanning.md).
+- **Automated security scanning** — [OpenGrep](https://github.com/opengrep/opengrep) SAST scan runs on PRs to `master`, pushes to `master`, and weekly (advisory-only). See [`docs/opengrep-scanning.md`](docs/opengrep-scanning.md).
 
 ---
 

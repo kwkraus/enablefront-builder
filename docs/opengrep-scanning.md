@@ -1,8 +1,19 @@
 # OpenGrep Security Scanning
 
 This repo runs [OpenGrep](https://github.com/opengrep/opengrep) — a static application
-security testing (SAST) engine — on every pull request targeting `master` (this repo's
-default branch), via `.github/workflows/opengrep.yml`.
+security testing (SAST) engine — via `.github/workflows/opengrep.yml`, triggered on:
+
+- **`pull_request`** to `master` (this repo's default branch) — results attach to the PR.
+- **`push`** to `master` — establishes the baseline analysis on the default branch.
+- **`schedule`** — weekly (Mondays 04:23 UTC), to catch drift from upstream rule updates.
+
+> **Why push and schedule, not just pull_request?** A `pull_request`-triggered SARIF
+> upload attaches results to that PR's merge ref, not the default branch. GitHub's
+> repo-wide **Security → Code scanning** page (and its "Tool" filter) is scoped to the
+> default branch, so without at least one `push`-triggered analysis of `master`, OpenGrep
+> never appears there as a registered tool — even though PR runs succeed. This mirrors
+> GitHub's own official example workflows for third-party SARIF tools, which trigger on
+> `push`/`schedule`, not `pull_request` alone.
 
 ## Why OpenGrep (not Semgrep)?
 
@@ -27,6 +38,7 @@ workflow installs and drives the CLI directly.
    `opengrep`), plus a build artifact and a short job-summary count.
 
 ## Advisory-only (for now)
+
 
 The job runs with `continue-on-error: true`, so findings are visible (Security tab, job
 summary, artifact) but **never fail the PR check or block merge**. This is intentional
