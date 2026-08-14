@@ -2,7 +2,6 @@ using EnableFront.Builder.Domain;
 using EnableFront.Builder.Features.Export;
 using EnableFront.Builder.Features.Me;
 using EnableFront.Builder.Features.Metrics;
-using EnableFront.Builder.Features.People;
 using EnableFront.Builder.Features.Series;
 using EnableFront.Builder.Features.Sessions;
 using EnableFront.Builder.Infrastructure.Data;
@@ -67,7 +66,6 @@ builder.Services.AddScoped<MetricsService>();
 builder.Services.AddScoped<MarkdownExportService>();
 
 // Graph services (delegated-only — no app-credential GraphServiceClient)
-builder.Services.AddScoped<IGraphUserClient, GraphUserClient>();
 builder.Services.AddScoped<IOboTokenService, OboTokenService>();
 builder.Services.AddScoped<WarmRuleEvaluator>();
 builder.Services.AddScoped<MetricsRecomputeService>();
@@ -128,7 +126,6 @@ app.MapGet("/api/time", () =>
 // Feature endpoints
 app.MapSeriesEndpoints();
 app.MapSessionEndpoints();
-app.MapPeopleEndpoints();
 app.MapMetricsEndpoints();
 app.MapMeEndpoints();
 app.MapExportEndpoints();

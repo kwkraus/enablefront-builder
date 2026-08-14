@@ -24,7 +24,7 @@ Applies to `src/backend`. Shared rules (architecture, build/test, congruency che
 - `Program.cs` — startup, DI
 - `Features/<Name>/` — endpoints, DTOs, handlers, validators
 - `Domain/` — entities, value objects, rules (identity, normalization, warm/influence)
-- `Infrastructure/` — data access, external integrations; `Infrastructure/Graph/` for GraphUserClient + OBO token service
+- `Infrastructure/` — data access, external integrations; `Infrastructure/Graph/` for `OboTokenService` (used by `/me/photo`)
 - `Metrics/` — recompute orchestrator
 - `Common/` — shared primitives, errors, result types
 - Tests: `tests/backend/` mirroring feature folders
@@ -47,7 +47,7 @@ Applies to `src/backend`. Shared rules (architecture, build/test, congruency che
 - Schema details, constraints, indexes → `data-schema-migration` skill.
 
 ## Graph
-- Delegated-only (OBO) for directory user lookup (people picker) via `GraphUserClient` + `OboTokenService`. No webinar or data-sync integration.
+- Delegated-only (OBO) via `OboTokenService`, used solely for `/me/photo`. No directory user lookup, webinar, or data-sync integration.
 
 ## Security & Config
 - Secrets in user-secrets or env vars; do not commit `appsettings.*.json` overrides.

@@ -5,6 +5,4 @@ public record SessionResponseDto(
     Guid SeriesId,
     string Title,
     DateTime StartsAt,
-    DateTime EndsAt,
-    List<SessionPresenterDto> Presenters,
-    List<SessionCoordinatorDto> Coordinators);
+    DateTime EndsAt);
