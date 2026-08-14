@@ -42,9 +42,37 @@ jobs:
 
       - name: Install OpenGrep CLI
         run: |
-          curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh \
-            | bash -s -- -v "${OPENGREP_VERSION}" --verify-signatures
-          echo "$HOME/.opengrep/cli/latest" >> "$GITHUB_PATH"
+          case "$(uname -s)-$(uname -m)" in
+            Linux-x86_64|Linux-amd64)
+              opengrep_dist=opengrep_manylinux_x86
+              ;;
+            Linux-aarch64|Linux-arm64)
+              opengrep_dist=opengrep_manylinux_aarch64
+              ;;
+            *)
+              echo "Unsupported runner for OpenGrep: $(uname -s) $(uname -m)" >&2
+              exit 1
+              ;;
+          esac
+
+          install_dir="$HOME/.opengrep/cli/${OPENGREP_VERSION}"
+          base_url="https://github.com/opengrep/opengrep/releases/download/${OPENGREP_VERSION}/${opengrep_dist}"
+
+          mkdir -p "${install_dir}"
+          curl --fail --show-error --location "${base_url}" --output "${install_dir}/opengrep"
+          curl --fail --show-error --location "${base_url}.cert" --output "${install_dir}/opengrep.cert"
+          curl --fail --show-error --location "${base_url}.sig" --output "${install_dir}/opengrep.sig"
+
+          cosign verify-blob \
+            --cert "${install_dir}/opengrep.cert" \
+            --signature "${install_dir}/opengrep.sig" \
+            --certificate-identity-regexp "https://github.com/opengrep/opengrep.+" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            "${install_dir}/opengrep"
+
+          chmod +x "${install_dir}/opengrep"
+          "${install_dir}/opengrep" --version
+          echo "${install_dir}" >> "$GITHUB_PATH"
 
       - name: Fetch rule set (semgrep-rules, pinned)
         run: |

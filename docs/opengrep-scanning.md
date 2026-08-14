@@ -25,8 +25,8 @@ workflow installs and drives the CLI directly.
 
 ## How the workflow works
 
-1. Installs the pinned OpenGrep CLI release via the official install script, verified
-   with Cosign signatures (`sigstore/cosign-installer`).
+1. Downloads the pinned OpenGrep CLI release asset directly from GitHub Releases and
+   verifies it with Cosign signatures (`sigstore/cosign-installer`).
 2. Sparse-clones [`semgrep/semgrep-rules`](https://github.com/semgrep/semgrep-rules)
    (Apache-2.0) at a pinned commit — the rule source is **not** vendored into this repo.
 3. Runs `opengrep scan` against the whole repo using rule packs for:
