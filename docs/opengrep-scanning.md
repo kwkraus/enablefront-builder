@@ -1,8 +1,8 @@
 # OpenGrep Security Scanning
 
 This repo runs [OpenGrep](https://github.com/opengrep/opengrep) — a static application
-security testing (SAST) engine — on every pull request targeting `main`, via
-`.github/workflows/opengrep.yml`.
+security testing (SAST) engine — on every pull request targeting `master` (this repo's
+default branch), via `.github/workflows/opengrep.yml`.
 
 ## Why OpenGrep (not Semgrep)?
 
