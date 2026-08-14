@@ -44,8 +44,8 @@ Verify scripts exist in the relevant manifest before running.
 
 ## Security Scanning
 
-`.github/workflows/opengrep.yml` runs OpenGrep (SAST) on every PR to `master` (this
-repo's default branch — there is no `main` branch). It is
+`.github/workflows/opengrep.yml` runs OpenGrep (SAST) on PRs to `master` (this repo's
+default branch — there is no `main` branch), pushes to `master`, and weekly. It is
 advisory-only (`continue-on-error: true`) — reports to the Security tab but never blocks
 merge. Plain Actions workflow, not a `gh-aw` agentic workflow. Details:
 `docs/opengrep-scanning.md`.
