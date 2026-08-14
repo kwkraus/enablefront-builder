@@ -1,12 +1,5 @@
 import { apiFetch } from './client'
-import type {
-  SessionListItem,
-  SessionResponse,
-  PersonSearchResult,
-  SessionPresenterDto,
-  SessionCoordinatorDto,
-  PersonInput,
-} from './types'
+import type { SessionListItem, SessionResponse } from './types'
 
 export async function getSessionsBySeries(
   seriesId: string,
@@ -65,67 +58,4 @@ export async function updateSessionTitle(
 }
 export async function deleteSession(id: string, accessToken: string): Promise<void> {
   return apiFetch<void>(`/sessions/${id}`, { method: 'DELETE' }, accessToken)
-}
-
-// --- People search ---
-
-export async function searchPeople(
-  query: string,
-  accessToken: string,
-): Promise<PersonSearchResult[]> {
-  return apiFetch<PersonSearchResult[]>(
-    `/people/search?q=${encodeURIComponent(query)}`,
-    {},
-    accessToken,
-  )
-}
-
-// --- Presenters ---
-
-export async function getSessionPresenters(
-  sessionId: string,
-  accessToken: string,
-): Promise<SessionPresenterDto[]> {
-  return apiFetch<SessionPresenterDto[]>(
-    `/sessions/${sessionId}/presenters`,
-    {},
-    accessToken,
-  )
-}
-
-export async function setSessionPresenters(
-  sessionId: string,
-  people: PersonInput[],
-  accessToken: string,
-): Promise<SessionPresenterDto[]> {
-  return apiFetch<SessionPresenterDto[]>(
-    `/sessions/${sessionId}/presenters`,
-    { method: 'PUT', body: JSON.stringify({ people }) },
-    accessToken,
-  )
-}
-
-// --- Coordinators ---
-
-export async function getSessionCoordinators(
-  sessionId: string,
-  accessToken: string,
-): Promise<SessionCoordinatorDto[]> {
-  return apiFetch<SessionCoordinatorDto[]>(
-    `/sessions/${sessionId}/coordinators`,
-    {},
-    accessToken,
-  )
-}
-
-export async function setSessionCoordinators(
-  sessionId: string,
-  people: PersonInput[],
-  accessToken: string,
-): Promise<SessionCoordinatorDto[]> {
-  return apiFetch<SessionCoordinatorDto[]>(
-    `/sessions/${sessionId}/coordinators`,
-    { method: 'PUT', body: JSON.stringify({ people }) },
-    accessToken,
-  )
 }

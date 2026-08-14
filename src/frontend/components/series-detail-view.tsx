@@ -4,8 +4,8 @@ import { useState, useEffect, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { TrashIcon, PlusIcon, PeopleIcon, OrganizationIcon, DownloadIcon } from '@primer/octicons-react'
-import { Button, IconButton, Tooltip, Token } from '@primer/react'
+import { TrashIcon, PlusIcon, DownloadIcon } from '@primer/octicons-react'
+import { Button, IconButton, Token } from '@primer/react'
 import { ErrorBanner } from '@/components/error-banner'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { InlineEditableTitle } from '@/components/inline-editable-title'
@@ -13,28 +13,6 @@ import { MetricsPanel } from '@/components/metrics-panel'
 import { updateSeries, deleteSeries, exportSeriesMarkdown } from '@/lib/api/series'
 import { deleteSession } from '@/lib/api/sessions'
 import type { SeriesResponse, SessionListItem, SeriesMetricsResponse } from '@/lib/api/types'
-
-function buildPeopleTooltip(s: SessionListItem): string {
-  const lines: string[] = []
-
-  if (s.ownerDisplayName) {
-    lines.push(`Organizer: ${s.ownerDisplayName}`)
-  }
-
-  if (s.presenters && s.presenters.length > 0) {
-    lines.push(`Presenters: ${s.presenters.map((p) => p.displayName).join(', ')}`)
-  } else {
-    lines.push('Presenters: None')
-  }
-
-  if (s.coordinators && s.coordinators.length > 0) {
-    lines.push(`Co-organizers: ${s.coordinators.map((c) => c.displayName).join(', ')}`)
-  } else {
-    lines.push('Co-organizers: None')
-  }
-
-  return lines.join('\n')
-}
 
 function formatDateTime(iso: string | null | undefined) {
   if (!iso) return '—'
@@ -312,7 +290,6 @@ export default function SeriesDetailView({ series, sessions, metrics }: Props) {
                 >
                   <th className="px-4 py-3 text-left font-medium">Title</th>
                   <th className="px-4 py-3 text-left font-medium">Delivery</th>
-                  <th className="px-4 py-3 text-left font-medium">People</th>
                   <th className="px-4 py-3 text-right font-medium">Reg.</th>
                   <th className="px-4 py-3 text-right font-medium">Att.</th>
                   <th className="px-4 py-3 text-right font-medium w-20">Actions</th>
@@ -365,31 +342,6 @@ export default function SeriesDetailView({ series, sessions, metrics }: Props) {
                           </div>
                         )
                       })()}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap" style={{ color: 'var(--fgColor-muted)' }}>
-                      <Tooltip text={buildPeopleTooltip(s)} direction="s" type="description">
-                        <button
-                          type="button"
-                          className="inline-flex items-center gap-3 text-xs"
-                          style={{
-                            cursor: 'default',
-                            background: 'none',
-                            border: 'none',
-                            padding: 0,
-                            color: 'inherit',
-                            font: 'inherit',
-                          }}
-                        >
-                          <span className="inline-flex items-center gap-1">
-                            <PeopleIcon size={14} />
-                            {s.presenterCount}
-                          </span>
-                          <span className="inline-flex items-center gap-1">
-                            <OrganizationIcon size={14} />
-                            {s.coordinatorCount}
-                          </span>
-                        </button>
-                      </Tooltip>
                     </td>
                     <td className="px-4 py-3 tabular-nums text-right">{s.totalRegistrations}</td>
                     <td className="px-4 py-3 tabular-nums text-right">{s.totalAttendees}</td>

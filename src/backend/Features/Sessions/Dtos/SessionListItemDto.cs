@@ -7,8 +7,4 @@ public record SessionListItemDto(
     DateTime EndsAt,
     int TotalRegistrations,
     int TotalAttendees,
-    int PresenterCount,
-    int CoordinatorCount,
-    string OwnerDisplayName,
-    List<PersonSummary> Presenters,
-    List<PersonSummary> Coordinators);
+    string OwnerDisplayName);

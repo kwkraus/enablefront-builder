@@ -15,8 +15,6 @@ public class AppDbContext : DbContext
     public DbSet<NormalizedAttendance> NormalizedAttendances => Set<NormalizedAttendance>();
     public DbSet<SessionMetrics> SessionMetrics => Set<SessionMetrics>();
     public DbSet<SeriesMetrics> SeriesMetrics => Set<SeriesMetrics>();
-    public DbSet<SessionPresenter> SessionPresenters => Set<SessionPresenter>();
-    public DbSet<SessionCoordinator> SessionCoordinators => Set<SessionCoordinator>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,28 +48,6 @@ public class AppDbContext : DbContext
             e.Property(x => x.EndsAt).HasColumnType("datetime2").HasConversion(utcConverter);
             e.HasOne<Series>().WithMany().HasForeignKey(x => x.SeriesId).OnDelete(DeleteBehavior.Cascade);
             e.HasIndex(x => new { x.SeriesId, x.StartsAt });
-        });
-
-        // --- SessionPresenter ---
-        modelBuilder.Entity<SessionPresenter>(e =>
-        {
-            e.HasKey(x => x.SessionPresenterId);
-            e.Property(x => x.SessionPresenterId).ValueGeneratedNever();
-            e.Property(x => x.CreatedAt).HasColumnType("datetime2").HasConversion(utcConverter);
-            e.HasIndex(x => new { x.SessionId, x.EntraUserId }).IsUnique();
-            e.HasIndex(x => x.SessionId);
-            e.HasOne<Session>().WithMany().HasForeignKey(x => x.SessionId).OnDelete(DeleteBehavior.Cascade);
-        });
-
-        // --- SessionCoordinator ---
-        modelBuilder.Entity<SessionCoordinator>(e =>
-        {
-            e.HasKey(x => x.SessionCoordinatorId);
-            e.Property(x => x.SessionCoordinatorId).ValueGeneratedNever();
-            e.Property(x => x.CreatedAt).HasColumnType("datetime2").HasConversion(utcConverter);
-            e.HasIndex(x => new { x.SessionId, x.EntraUserId }).IsUnique();
-            e.HasIndex(x => x.SessionId);
-            e.HasOne<Session>().WithMany().HasForeignKey(x => x.SessionId).OnDelete(DeleteBehavior.Cascade);
         });
 
         // --- NormalizedRegistration ---
