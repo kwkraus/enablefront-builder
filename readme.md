@@ -1,8 +1,8 @@
-# EnableFront Builder
+# Enablemint Builder
 
-EnableFront Builder is a **webinar management platform** for local event planning, participation tracking, and engagement analytics. It helps organizations manage webinar series and individual sessions while preparing normalized event data for ingestion-first reporting workflows.
+Enablemint Builder is a **webinar management platform** for local event planning, participation tracking, and engagement analytics. It helps organizations manage webinar series and individual sessions while preparing normalized event data for ingestion-first reporting workflows.
 
-![About EnableFront Builder](https://github.com/user-attachments/assets/674c414a-8e81-47f5-90e1-6695f224319a)
+![About Enablemint Builder](https://github.com/user-attachments/assets/674c414a-8e81-47f5-90e1-6695f224319a)
 
 ---
 

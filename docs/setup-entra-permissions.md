@@ -1,6 +1,6 @@
 # Entra ID App Registration — Permission Setup
 
-This document describes the required Entra ID (Azure AD) app registration permissions for EnableFront Builder and how to configure them.
+This document describes the required Entra ID (Azure AD) app registration permissions for Enablemint Builder and how to configure them.
 
 ## Required Delegated Permissions
 
@@ -64,7 +64,7 @@ $App = Get-MgApplication -Filter "appId eq '$AppId'"
 
 1. Go to [Entra ID Portal](https://entra.microsoft.com)
 2. Navigate to **Identity** → **Applications** → **App registrations**
-3. Select your EnableFront Builder app
+3. Select your Enablemint Builder app
 4. Go to **API permissions**
 5. Click **Add a permission** → **Microsoft Graph** → **Delegated permissions**
 6. Search for and add: `User.ReadBasic.All`
