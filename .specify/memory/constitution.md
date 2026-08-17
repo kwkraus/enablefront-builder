@@ -35,7 +35,7 @@ Follow-up TODOs:
   - None.
 -->
 
-# EnableFront Builder Constitution
+# Enablemint Builder Constitution
 
 ## Core Principles
 
