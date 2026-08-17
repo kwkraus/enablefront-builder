@@ -1,8 +1,8 @@
-# EnableFront Builder
+# Enablemint Builder
 
-EnableFront Builder is a **webinar management platform** for local event planning, participation tracking, and engagement analytics. It helps organizations manage webinar series and individual sessions while preparing normalized event data for ingestion-first reporting workflows.
+Enablemint Builder is a **webinar management platform** for local event planning, participation tracking, and engagement analytics. It helps organizations manage webinar series and individual sessions while preparing normalized event data for ingestion-first reporting workflows.
 
-![About EnableFront Builder](https://github.com/user-attachments/assets/674c414a-8e81-47f5-90e1-6695f224319a)
+![About Enablemint Builder](https://github.com/user-attachments/assets/674c414a-8e81-47f5-90e1-6695f224319a)
 
 ---
 
@@ -84,7 +84,7 @@ tools/          # PowerShell scripts (e.g., Entra app registration)
 - **Ingestion-ready data model** — normalized registration and attendance records are persisted locally and remain the foundation for follow-on ingestion work.
 - **Metrics persisted on write** — all metric aggregations are computed and stored on write; no compute-on-read.
 - **Delegated-only Graph permissions** — OBO flow used exclusively to fetch the signed-in user's profile photo (`/api/v1/me/photo`); no directory search or background Graph calls.
-- **Automated security scanning** — [OpenGrep](https://github.com/opengrep/opengrep) SAST scan runs on every pull request to `master` (advisory-only). See [`docs/opengrep-scanning.md`](docs/opengrep-scanning.md).
+- **Automated security scanning** — [OpenGrep](https://github.com/opengrep/opengrep) SAST scan runs on PRs to `master`, pushes to `master`, and weekly (advisory-only). See [`docs/opengrep-scanning.md`](docs/opengrep-scanning.md).
 
 ---
 

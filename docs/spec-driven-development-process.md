@@ -19,7 +19,7 @@ Azure DevOps Agile **State** is the primary lifecycle signal. Tags are used only
 | `devops-workitem-manager` | General board CRUD, sprint planning, task/bug management, and spec-aware edits |
 | `speckit.analyze` | Read-only cross-artifact consistency and quality analysis across `spec.md`, `plan.md`, and `tasks.md` after task generation |
 
-Both agents are pre-configured for organization `kkraus` and project `EnableFront Builder`.
+Both agents are pre-configured for organization `kkraus` and project `Enablemint Builder`.
 
 ### speckit.analyze
 
@@ -152,7 +152,7 @@ These do **not** invalidate the technical specification by themselves:
 ### One-Time Setup
 
 1. **Enable Epic backlog**: Azure DevOps -> Project Settings -> Team Configuration -> Backlogs -> enable "Epics"
-2. **Create project wiki**: Azure DevOps -> Wiki -> Create project wiki (`EnableFront Builder.wiki`)
+2. **Create project wiki**: Azure DevOps -> Wiki -> Create project wiki (`Enablemint Builder.wiki`)
 
 These steps cannot be automated via MCP and must be done manually in the Azure DevOps web UI.
 
