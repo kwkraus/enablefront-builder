@@ -1,0 +1,16 @@
+{
+  "workflow": "speckit",
+  "specName": "Series Details (Description & Outcomes)",
+  "branch": "kwkraus-add-series-details-field",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-08-20T21:36:51.549Z"
+    }
+  ]
+}
