@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { TrashIcon, PlusIcon, DownloadIcon } from '@primer/octicons-react'
+import { TrashIcon, PlusIcon, DownloadIcon, LinkExternalIcon } from '@primer/octicons-react'
 import { Button, IconButton, Token } from '@primer/react'
 import { ErrorBanner } from '@/components/error-banner'
 import { ConfirmDialog } from '@/components/confirm-dialog'
@@ -354,6 +354,19 @@ export default function SeriesDetailView({ series, sessions, metrics }: Props) {
                           size="small"
                           onClick={() => setDeleteSessionId(s.sessionId)}
                         />
+                        {s.registrationUrl && (
+                          <IconButton
+                            as="a"
+                            href={s.registrationUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            icon={LinkExternalIcon}
+                            aria-label={`Registration Link for ${s.title}`}
+                            size="small"
+                            variant="default"
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        )}
                       </div>
                     </td>
                   </tr>
