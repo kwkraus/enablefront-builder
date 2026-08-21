@@ -4,14 +4,15 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { ChevronLeftIcon, CheckIcon, TrashIcon } from '@primer/octicons-react'
-import { Button, IconButton, Spinner, Token, SkeletonBox } from '@primer/react'
+import { ChevronLeftIcon, CheckIcon, TrashIcon, LinkIcon, LinkExternalIcon, PencilIcon } from '@primer/octicons-react'
+import { Button, IconButton, Spinner, Token, SkeletonBox, Link as PrimerLink } from '@primer/react'
 import { SkeletonText } from '@primer/react/experimental'
 import { ErrorBanner } from '@/components/error-banner'
 import { MetricsPanel } from '@/components/metrics-panel'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { InlineEditableTitle } from '@/components/inline-editable-title'
 import { SessionSchedulePicker } from '@/components/session-schedule-picker'
+import { RegistrationLinkDialog } from '@/components/registration-link-dialog'
 
 import {
   getSessionById,
@@ -54,6 +55,7 @@ export default function SessionDetailPage() {
       setTitle(s.title)
       setStartsAtDate(toDate(s.startsAt))
       setEndsAtDate(toDate(s.endsAt))
+      setRegistrationUrl(s.registrationUrl ?? null)
     } catch (err) {
       setLoadError(err instanceof Error ? err.message : 'Failed to load session')
     } finally {
@@ -68,6 +70,8 @@ export default function SessionDetailPage() {
   const [title, setTitle] = useState('')
   const [startsAtDate, setStartsAtDate] = useState<Date | null>(null)
   const [endsAtDate, setEndsAtDate] = useState<Date | null>(null)
+  const [registrationUrl, setRegistrationUrl] = useState<string | null>(null)
+  const [registrationDialogOpen, setRegistrationDialogOpen] = useState(false)
   const [touched, setTouched] = useState(false)
 
   const titleError = touched && !title.trim() ? 'Title is required' : null
@@ -113,6 +117,7 @@ export default function SessionDetailPage() {
           title: title.trim(),
           startsAt: startsAtDate ? startsAtDate.toISOString() : '',
           endsAt: endsAtDate ? endsAtDate.toISOString() : '',
+          registrationUrl,
         },
         token,
       )
@@ -263,6 +268,43 @@ export default function SessionDetailPage() {
               </p>
             )}
           </section>
+
+          <section className="rounded-lg border p-6 space-y-4" style={{ backgroundColor: 'var(--bgColor-default, var(--color-canvas-default))' }}>
+            <h2 className="text-base font-semibold">Registration</h2>
+
+            {registrationUrl ? (
+              <div className="flex items-center gap-2">
+                <PrimerLink
+                  href={registrationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1"
+                >
+                  Registration Link
+                  <LinkExternalIcon size={14} aria-hidden="true" />
+                </PrimerLink>
+                <IconButton
+                  icon={PencilIcon}
+                  aria-label="Edit registration link"
+                  size="small"
+                  variant="invisible"
+                  disabled={saveLoading}
+                  onClick={() => setRegistrationDialogOpen(true)}
+                />
+              </div>
+            ) : (
+              <Button
+                type="button"
+                variant="default"
+                size="small"
+                leadingVisual={LinkIcon}
+                disabled={saveLoading}
+                onClick={() => setRegistrationDialogOpen(true)}
+              >
+                Add Registration Link
+              </Button>
+            )}
+          </section>
         </div>
 
         <div className="flex items-center justify-between">
@@ -321,6 +363,16 @@ export default function SessionDetailPage() {
         loading={deleteLoading}
         onConfirm={handleDelete}
         onCancel={() => setDeleteOpen(false)}
+      />
+
+      <RegistrationLinkDialog
+        open={registrationDialogOpen}
+        initialValue={registrationUrl}
+        onSave={(value) => {
+          setRegistrationUrl(value)
+          setRegistrationDialogOpen(false)
+        }}
+        onCancel={() => setRegistrationDialogOpen(false)}
       />
     </div>
   )

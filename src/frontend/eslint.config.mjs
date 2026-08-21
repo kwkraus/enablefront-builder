@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "coverage/**",
     "test-results/**",
     ".playwright-artifacts-*/**",
+    "dist/**",
+    "node_modules/**",
+    "**/*.min.js",
     "next-env.d.ts",
   ]),
 ]);

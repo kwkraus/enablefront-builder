@@ -167,6 +167,50 @@ public class MarkdownExportServiceTests : IDisposable
             because: "sessions without a schedule should show 'Not yet set' instead of a date");
     }
 
+    // ── 7. Registration URL included when present ───────────────────────────
+
+    [Fact]
+    public async Task ExportSeriesAsync_IncludesRegistrationUrl_WhenSet()
+    {
+        // Arrange
+        var series = BuildSeries("Series With Link");
+        _db.Series.Add(series);
+
+        var session = BuildSession(series.SeriesId, "Session With Link");
+        session.RegistrationUrl = "https://teams.microsoft.com/registration/example";
+        _db.Sessions.Add(session);
+        await _db.SaveChangesAsync();
+
+        // Act
+        var result = await _sut.ExportSeriesAsync(series.SeriesId, OwnerUserId);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Content.Should().Contain("**Registration Link:** https://teams.microsoft.com/registration/example");
+    }
+
+    // ── 8. Registration URL omitted entirely when absent ─────────────────────
+
+    [Fact]
+    public async Task ExportSeriesAsync_OmitsRegistrationField_WhenUrlNotSet()
+    {
+        // Arrange
+        var series = BuildSeries("Series Without Link");
+        _db.Series.Add(series);
+
+        var session = BuildSession(series.SeriesId, "Session Without Link");
+        _db.Sessions.Add(session);
+        await _db.SaveChangesAsync();
+
+        // Act
+        var result = await _sut.ExportSeriesAsync(series.SeriesId, OwnerUserId);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Content.Should().NotContain("Registration Link");
+    }
+
+
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private EnableFront.Builder.Domain.Entities.Series BuildSeries(

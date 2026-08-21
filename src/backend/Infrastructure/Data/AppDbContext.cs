@@ -54,6 +54,7 @@ public class AppDbContext : DbContext
             e.Property(x => x.SessionId).ValueGeneratedNever();
             e.Property(x => x.StartsAt).HasColumnType("datetime2").HasConversion(utcConverter);
             e.Property(x => x.EndsAt).HasColumnType("datetime2").HasConversion(utcConverter);
+            e.Property(x => x.RegistrationUrl).HasMaxLength(2048);
             e.HasOne<Series>().WithMany().HasForeignKey(x => x.SeriesId).OnDelete(DeleteBehavior.Cascade);
             e.HasIndex(x => new { x.SeriesId, x.StartsAt });
         });

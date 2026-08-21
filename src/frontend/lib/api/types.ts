@@ -25,6 +25,7 @@ export interface SessionListItem {
   totalRegistrations: number
   totalAttendees: number
   ownerDisplayName: string
+  registrationUrl: string | null
 }
 
 export interface SessionResponse {
@@ -33,6 +34,7 @@ export interface SessionResponse {
   title: string
   startsAt: string
   endsAt: string
+  registrationUrl: string | null
 }
 
 export interface SeriesMetricsResponse {

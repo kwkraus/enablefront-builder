@@ -16,16 +16,22 @@ Thumbs.db
 .env.*
 
 # dependencies and build output
+# Node.js / frontend
 node_modules/
 dist/
 build/
 coverage/
 test-results/
 __pycache__/
+.next/
+
+# .NET
 bin/
 obj/
 *.user
 *.suo
 packages/
+
+# temporary files
 *.tmp
 *.swp
