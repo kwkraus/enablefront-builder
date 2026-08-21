@@ -1,3 +1,4 @@
+using EnableFront.Builder.Common;
 using EnableFront.Builder.Features.Series.Dtos;
 using EnableFront.Builder.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -58,11 +59,14 @@ public class SeriesService
 
     public async Task<SeriesResponseDto> CreateAsync(CreateSeriesRequest req, string ownerUserId)
     {
+        var sanitizedDetails = SanitizeDetailsOrThrow(req.Details);
+
         var series = new Domain.Entities.Series
         {
             SeriesId = Guid.NewGuid(),
             OwnerUserId = ownerUserId,
             Title = req.Title,
+            Details = sanitizedDetails,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -78,7 +82,11 @@ public class SeriesService
             .FirstOrDefaultAsync(s => s.SeriesId == id && s.OwnerUserId == ownerUserId);
         if (series is null) return null;
 
+        // Validate before mutating anything so a rejected update never persists partial content.
+        var sanitizedDetails = SanitizeDetailsOrThrow(req.Details);
+
         series.Title = req.Title;
+        series.Details = sanitizedDetails;
         series.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
 
@@ -96,6 +104,21 @@ public class SeriesService
         return true;
     }
 
+    /// <summary>
+    /// Sanitizes raw series details HTML down to the allow-listed subset and enforces the
+    /// maximum decoded plain-text length. Throws <see cref="SeriesDetailsTooLongException"/>
+    /// without mutating any state when the limit is exceeded.
+    /// </summary>
+    private static string? SanitizeDetailsOrThrow(string? rawDetails)
+    {
+        var result = SeriesDetailsSanitizer.Sanitize(rawDetails);
+        if (result.ExceedsMaxLength)
+            throw new SeriesDetailsTooLongException(
+                $"Series details must not exceed {SeriesDetailsSanitizer.MaxPlainTextLength:N0} characters.");
+
+        return result.SanitizedHtml;
+    }
+
     private static SeriesResponseDto ToResponseDto(Domain.Entities.Series s) =>
-        new(s.SeriesId, s.Title, s.CreatedAt, s.UpdatedAt);
+        new(s.SeriesId, s.Title, s.Details, s.CreatedAt, s.UpdatedAt);
 }

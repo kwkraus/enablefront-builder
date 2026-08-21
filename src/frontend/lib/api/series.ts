@@ -10,7 +10,7 @@ export async function getSeriesById(id: string, accessToken: string): Promise<Se
 }
 
 export async function createSeries(
-  data: { title: string },
+  data: { title: string; details?: string | null },
   accessToken: string,
 ): Promise<SeriesResponse> {
   return apiFetch<SeriesResponse>(
@@ -25,7 +25,7 @@ export async function createSeries(
 
 export async function updateSeries(
   id: string,
-  data: { title: string },
+  data: { title: string; details?: string | null },
   accessToken: string,
 ): Promise<SeriesResponse> {
   return apiFetch<SeriesResponse>(

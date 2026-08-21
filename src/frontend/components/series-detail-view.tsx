@@ -9,6 +9,7 @@ import { Button, IconButton, Token } from '@primer/react'
 import { ErrorBanner } from '@/components/error-banner'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { InlineEditableTitle } from '@/components/inline-editable-title'
+import { SeriesDetails } from '@/components/series-details'
 import { MetricsPanel } from '@/components/metrics-panel'
 import { updateSeries, deleteSeries, exportSeriesMarkdown } from '@/lib/api/series'
 import { deleteSession } from '@/lib/api/sessions'
@@ -100,6 +101,40 @@ export default function SeriesDetailView({ series, sessions, metrics }: Props) {
       throw err
     } finally {
       setEditLoading(false)
+    }
+  }
+
+  const [seriesDetails, setSeriesDetails] = useState<string | null>(series.details)
+  const [detailsLoading, setDetailsLoading] = useState(false)
+  const [detailsError, setDetailsError] = useState<string | null>(null)
+
+  // The backend only ever returns/updates a series for its owner (see
+  // specs/001-series-details/research.md Decision 4) -- there is no
+  // separate non-owner "viewer" role today, so anyone who can load this page
+  // can edit its details. This is the single call site to change if a
+  // distinct viewer permission is ever introduced.
+  const canEditDetails = true
+
+  useEffect(() => {
+    setSeriesDetails(series.details)
+  }, [series.details])
+
+  async function handleDetailsSave(nextDetails: string) {
+    setDetailsLoading(true)
+    setDetailsError(null)
+    try {
+      const updated = await updateSeries(
+        series.seriesId,
+        { title: seriesTitle, details: nextDetails },
+        token,
+      )
+      setSeriesDetails(updated.details)
+      router.refresh()
+    } catch (err) {
+      setDetailsError(err instanceof Error ? err.message : 'Failed to update series details')
+      throw err
+    } finally {
+      setDetailsLoading(false)
     }
   }
 
@@ -199,6 +234,15 @@ export default function SeriesDetailView({ series, sessions, metrics }: Props) {
       {editError && <ErrorBanner message={editError} />}
       {deleteSessionError && <ErrorBanner message={deleteSessionError} />}
       {exportError && <ErrorBanner message={exportError} onRetry={handleExportMarkdown} />}
+      {detailsError && <ErrorBanner message={detailsError} />}
+
+      <SeriesDetails
+        value={seriesDetails}
+        canEdit={canEditDetails}
+        onSave={handleDetailsSave}
+        saving={detailsLoading}
+        disabled={busy}
+      />
 
       <section aria-label="Series metrics">
         <h2

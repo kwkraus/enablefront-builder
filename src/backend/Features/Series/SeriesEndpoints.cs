@@ -30,8 +30,16 @@ public static class SeriesEndpoints
                 return Results.BadRequest(new ErrorEnvelope(
                     "validation_error", "Title is required.", ctx.TraceIdentifier));
 
-            var result = await service.CreateAsync(req, userId);
-            return Results.Created($"/api/v1/series/{result.SeriesId}", result);
+            try
+            {
+                var result = await service.CreateAsync(req, userId);
+                return Results.Created($"/api/v1/series/{result.SeriesId}", result);
+            }
+            catch (SeriesDetailsTooLongException ex)
+            {
+                return Results.BadRequest(new ErrorEnvelope(
+                    "validation_error", ex.Message, ctx.TraceIdentifier));
+            }
         });
 
         group.MapGet("/{id:guid}", async (Guid id, SeriesService service, HttpContext ctx) =>
@@ -57,11 +65,19 @@ public static class SeriesEndpoints
                 return Results.BadRequest(new ErrorEnvelope(
                     "validation_error", "Title is required.", ctx.TraceIdentifier));
 
-            var result = await service.UpdateAsync(id, req, userId);
-            return result is null
-                ? Results.NotFound(new ErrorEnvelope(
-                    "series_not_found", "Series not found.", ctx.TraceIdentifier))
-                : Results.Ok(result);
+            try
+            {
+                var result = await service.UpdateAsync(id, req, userId);
+                return result is null
+                    ? Results.NotFound(new ErrorEnvelope(
+                        "series_not_found", "Series not found.", ctx.TraceIdentifier))
+                    : Results.Ok(result);
+            }
+            catch (SeriesDetailsTooLongException ex)
+            {
+                return Results.BadRequest(new ErrorEnvelope(
+                    "validation_error", ex.Message, ctx.TraceIdentifier));
+            }
         });
 
         group.MapDelete("/{id:guid}", async (Guid id, SeriesService service, HttpContext ctx) =>
