@@ -61,6 +61,8 @@ jobs:
           BACKEND_API_BASE_URL: http://localhost:5000
           NEXTAUTH_URL: http://localhost:3000
           NEXTAUTH_SECRET: ci-secret-placeholder
-          AZURE_AD_CLIENT_ID: ci-client-id
-          AZURE_AD_CLIENT_SECRET: ci-client-secret
-          AZURE_AD_TENANT_ID: ci-tenant-id
+          # Non-production placeholders: only satisfy build-time configuration validation.
+          # These are not Azure credentials and must never be used outside CI.
+          AZURE_AD_CLIENT_ID: 00000000-0000-4000-8000-000000000001
+          AZURE_AD_CLIENT_SECRET: ci-placeholder-not-a-secret
+          AZURE_AD_TENANT_ID: 00000000-0000-4000-8000-000000000002
