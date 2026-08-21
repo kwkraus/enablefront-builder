@@ -38,7 +38,8 @@ public class SessionService
                 s.EndsAt,
                 m?.TotalRegistrations ?? 0,
                 m?.TotalAttendees ?? 0,
-                ownerDisplayName);
+                ownerDisplayName,
+                s.RegistrationUrl);
         });
     }
 
@@ -57,6 +58,10 @@ public class SessionService
         if (req.EndsAt <= req.StartsAt)
             return (null, "invalid_time_range");
 
+        var (registrationUrl, registrationUrlErrorCode) = RegistrationUrlValidator.Normalize(req.RegistrationUrl);
+        if (registrationUrlErrorCode is not null)
+            return (null, registrationUrlErrorCode);
+
         var seriesExists = await _db.Series
             .AnyAsync(s => s.SeriesId == seriesId && s.OwnerUserId == ownerUserId);
         if (!seriesExists)
@@ -69,7 +74,8 @@ public class SessionService
             OwnerUserId = ownerUserId,
             Title = req.Title,
             StartsAt = req.StartsAt.Kind == DateTimeKind.Utc ? req.StartsAt : req.StartsAt.ToUniversalTime(),
-            EndsAt = req.EndsAt.Kind == DateTimeKind.Utc ? req.EndsAt : req.EndsAt.ToUniversalTime()
+            EndsAt = req.EndsAt.Kind == DateTimeKind.Utc ? req.EndsAt : req.EndsAt.ToUniversalTime(),
+            RegistrationUrl = registrationUrl
         };
 
         _db.Sessions.Add(session);
@@ -83,6 +89,10 @@ public class SessionService
         if (req.EndsAt <= req.StartsAt)
             return (null, "invalid_time_range");
 
+        var (registrationUrl, registrationUrlErrorCode) = RegistrationUrlValidator.Normalize(req.RegistrationUrl);
+        if (registrationUrlErrorCode is not null)
+            return (null, registrationUrlErrorCode);
+
         var session = await _db.Sessions
             .FirstOrDefaultAsync(s => s.SessionId == sessionId && s.OwnerUserId == ownerUserId);
         if (session is null)
@@ -91,6 +101,7 @@ public class SessionService
         session.Title = req.Title;
         session.StartsAt = req.StartsAt.Kind == DateTimeKind.Utc ? req.StartsAt : req.StartsAt.ToUniversalTime();
         session.EndsAt = req.EndsAt.Kind == DateTimeKind.Utc ? req.EndsAt : req.EndsAt.ToUniversalTime();
+        session.RegistrationUrl = registrationUrl;
 
         await _db.SaveChangesAsync();
 
@@ -127,5 +138,5 @@ public class SessionService
     // --- Helpers ---
 
     private static SessionResponseDto ToResponseDto(Session s) =>
-        new(s.SessionId, s.SeriesId, s.Title, s.StartsAt, s.EndsAt);
+        new(s.SessionId, s.SeriesId, s.Title, s.StartsAt, s.EndsAt, s.RegistrationUrl);
 }

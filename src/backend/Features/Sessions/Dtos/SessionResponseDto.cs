@@ -5,4 +5,5 @@ public record SessionResponseDto(
     Guid SeriesId,
     string Title,
     DateTime StartsAt,
-    DateTime EndsAt);
+    DateTime EndsAt,
+    string? RegistrationUrl = null);

@@ -4,10 +4,11 @@ import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { ChevronLeftIcon } from '@primer/octicons-react'
-import { Button, FormControl, TextInput, Spinner } from '@primer/react'
+import { ChevronLeftIcon, LinkIcon, LinkExternalIcon, PencilIcon } from '@primer/octicons-react'
+import { Button, FormControl, IconButton, TextInput, Spinner, Link as PrimerLink } from '@primer/react'
 import { ErrorBanner } from '@/components/error-banner'
 import { SessionSchedulePicker } from '@/components/session-schedule-picker'
+import { RegistrationLinkDialog } from '@/components/registration-link-dialog'
 import { createSession } from '@/lib/api/sessions'
 
 const cardStyle: React.CSSProperties = {
@@ -27,6 +28,8 @@ export default function NewSessionPage() {
   const [title, setTitle] = useState('')
   const [startsAtDate, setStartsAtDate] = useState<Date | null>(null)
   const [endsAtDate, setEndsAtDate] = useState<Date | null>(null)
+  const [registrationUrl, setRegistrationUrl] = useState<string | null>(null)
+  const [registrationDialogOpen, setRegistrationDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [touched, setTouched] = useState(false)
@@ -52,6 +55,7 @@ export default function NewSessionPage() {
           title: title.trim(),
           startsAt: startsAtDate ? startsAtDate.toISOString() : '',
           endsAt: endsAtDate ? endsAtDate.toISOString() : '',
+          registrationUrl,
         },
         authSession?.accessToken ?? '',
       )
@@ -130,6 +134,40 @@ export default function NewSessionPage() {
           )}
         </div>
 
+        <div className="space-y-3" style={cardStyle}>
+          <h2 className="text-base font-semibold">Registration</h2>
+          {registrationUrl ? (
+            <div className="flex items-center gap-2">
+              <PrimerLink
+                href={registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1"
+              >
+                Registration Link
+                <LinkExternalIcon size={14} aria-hidden="true" />
+              </PrimerLink>
+              <IconButton
+                icon={PencilIcon}
+                aria-label="Edit registration link"
+                size="small"
+                variant="invisible"
+                onClick={() => setRegistrationDialogOpen(true)}
+              />
+            </div>
+          ) : (
+            <Button
+              type="button"
+              variant="default"
+              size="small"
+              leadingVisual={LinkIcon}
+              onClick={() => setRegistrationDialogOpen(true)}
+            >
+              Add Registration Link
+            </Button>
+          )}
+        </div>
+
         <div className="flex items-center gap-3 pt-2">
           <Button type="submit" variant="primary" disabled={loading}>
             {loading ? 'Saving…' : 'Save'}
@@ -139,6 +177,16 @@ export default function NewSessionPage() {
           </Button>
         </div>
       </form>
+
+      <RegistrationLinkDialog
+        open={registrationDialogOpen}
+        initialValue={registrationUrl}
+        onSave={(value) => {
+          setRegistrationUrl(value)
+          setRegistrationDialogOpen(false)
+        }}
+        onCancel={() => setRegistrationDialogOpen(false)}
+      />
     </div>
   )
 }

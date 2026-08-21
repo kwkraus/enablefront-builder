@@ -36,12 +36,14 @@ public static class SessionEndpoints
                 var (session, errorCode) = await service.CreateAsync(id, req, userId);
                 if (session is null)
                 {
-                    return errorCode == "series_not_found"
-                        ? Results.NotFound(new ErrorEnvelope(
-                            "series_not_found", "Series not found.", ctx.TraceIdentifier))
-                        : Results.BadRequest(new ErrorEnvelope(
-                            errorCode ?? "invalid_request",
-                            "EndsAt must be after StartsAt.", ctx.TraceIdentifier));
+                    if (errorCode == "series_not_found")
+                        return Results.NotFound(new ErrorEnvelope(
+                            "series_not_found", "Series not found.", ctx.TraceIdentifier));
+
+                    return Results.BadRequest(new ErrorEnvelope(
+                        errorCode ?? "invalid_request",
+                        RegistrationUrlErrorMessage(errorCode) ?? "EndsAt must be after StartsAt.",
+                        ctx.TraceIdentifier));
                 }
 
                 return Results.Created($"/api/v1/sessions/{session.SessionId}", session);
@@ -78,11 +80,14 @@ public static class SessionEndpoints
             var (session, errorCode) = await service.UpdateAsync(id, req, userId);
             if (session is null)
             {
-                return errorCode == "invalid_time_range"
-                    ? Results.BadRequest(new ErrorEnvelope(
-                        "invalid_time_range", "EndsAt must be after StartsAt.", ctx.TraceIdentifier))
-                    : Results.NotFound(new ErrorEnvelope(
+                if (errorCode == "session_not_found")
+                    return Results.NotFound(new ErrorEnvelope(
                         "session_not_found", "Session not found.", ctx.TraceIdentifier));
+
+                return Results.BadRequest(new ErrorEnvelope(
+                    errorCode ?? "invalid_time_range",
+                    RegistrationUrlErrorMessage(errorCode) ?? "EndsAt must be after StartsAt.",
+                    ctx.TraceIdentifier));
             }
 
             return Results.Ok(session);
@@ -123,4 +128,18 @@ public static class SessionEndpoints
 
         return app;
     }
+
+    /// <summary>
+    /// Maps a <see cref="RegistrationUrlValidator"/> error code to a message that
+    /// identifies the <c>registrationUrl</c> field, or <see langword="null"/> when
+    /// <paramref name="errorCode"/> is not a registration URL error.
+    /// </summary>
+    private static string? RegistrationUrlErrorMessage(string? errorCode) => errorCode switch
+    {
+        RegistrationUrlValidator.TooLongErrorCode =>
+            $"registrationUrl must be {RegistrationUrlValidator.MaxLength} characters or fewer.",
+        RegistrationUrlValidator.InvalidErrorCode =>
+            "registrationUrl must be a well-formed absolute http:// or https:// URL.",
+        _ => null
+    };
 }
