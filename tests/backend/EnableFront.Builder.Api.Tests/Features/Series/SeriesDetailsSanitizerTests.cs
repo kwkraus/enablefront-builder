@@ -16,6 +16,14 @@ public class SeriesDetailsSanitizerTests
     }
 
     [Fact]
+    public void Sanitize_ClosesOpenParagraph_WhenAnotherBlockStarts()
+    {
+        var result = SeriesDetailsSanitizer.Sanitize("<p>Before<p>After</p>");
+
+        result.SanitizedHtml.Should().Be("<p>Before</p><p>After</p>");
+    }
+
+    [Fact]
     public void Sanitize_PreservesAllowedInlineFormatting()
     {
         var result = SeriesDetailsSanitizer.Sanitize("<p><strong>Bold</strong> <em>Italic</em> <u>Underline</u></p>");

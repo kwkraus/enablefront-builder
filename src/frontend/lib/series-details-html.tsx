@@ -26,6 +26,9 @@ const ALLOWED_TAGS: Record<string, string> = {
   u: 'u',
 }
 
+/** Tags that cannot legally be nested beneath an open paragraph. */
+const BLOCK_TAGS = new Set(['p', 'ul', 'li'])
+
 /** Canonical tags that never require (or accept) children. */
 const VOID_TAGS = new Set(['br'])
 
@@ -89,6 +92,13 @@ function parseSeriesDetailsHtml(html: string): TreeNode[] {
     }
 
     if (!isClosing) {
+      // Browser HTML parsing automatically closes an open paragraph before any
+      // block-level tag, including another paragraph or list. Preserve that
+      // normalization to avoid invalid `<p><p>` / `<p><ul>` structures.
+      while (stack.length > 1 && stack[stack.length - 1]?.tag === 'p' && BLOCK_TAGS.has(canonical)) {
+        stack.pop()
+      }
+
       const node: ElementNode = { tag: canonical, children: [] }
       stack[stack.length - 1].children.push(node)
       stack.push(node)

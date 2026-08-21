@@ -56,6 +56,9 @@ public static class SeriesDetailsSanitizer
     /// <summary>Canonical allowed tag names that never require a closing tag.</summary>
     private static readonly HashSet<string> VoidTags = new(StringComparer.OrdinalIgnoreCase) { "br" };
 
+    /// <summary>Tags that cannot be nested beneath an open paragraph without first closing it.</summary>
+    private static readonly HashSet<string> BlockTags = new(StringComparer.OrdinalIgnoreCase) { "p", "ul", "li" };
+
     /// <summary>Tags whose element AND text content are discarded entirely (unsafe/executable content).</summary>
     private static readonly HashSet<string> DropWithContentTags = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -131,6 +134,15 @@ public static class SeriesDetailsSanitizer
                 }
                 else if (!isClosing)
                 {
+                    // Normalize invalid HTML that browsers would automatically split
+                    // into sibling blocks, e.g. `<p>Before<ul>...` becomes
+                    // `<p>Before</p><ul>...`.
+                    while (emitStack.Count > 0 && emitStack.Peek() == "p" && BlockTags.Contains(canonical))
+                    {
+                        var closingParagraph = emitStack.Pop();
+                        output.Append("</").Append(closingParagraph).Append('>');
+                    }
+
                     output.Append('<').Append(canonical).Append('>');
                     emitStack.Push(canonical);
                 }
