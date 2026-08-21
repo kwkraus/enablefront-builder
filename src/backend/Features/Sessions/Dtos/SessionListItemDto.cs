@@ -7,4 +7,5 @@ public record SessionListItemDto(
     DateTime EndsAt,
     int TotalRegistrations,
     int TotalAttendees,
-    string OwnerDisplayName);
+    string OwnerDisplayName,
+    string? RegistrationUrl = null);
