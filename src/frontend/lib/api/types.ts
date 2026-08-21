@@ -12,6 +12,7 @@ export interface SeriesListItem {
 export interface SeriesResponse {
   seriesId: string
   title: string
+  details: string | null
   createdAt: string
   updatedAt: string
 }

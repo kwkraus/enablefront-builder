@@ -15,11 +15,14 @@ Thumbs.db
 .env
 .env.*
 
+# dependencies and build output
 # Node.js / frontend
 node_modules/
 dist/
 build/
 coverage/
+test-results/
+__pycache__/
 .next/
 
 # .NET

@@ -28,6 +28,12 @@ public class AppDbContext : DbContext
             v => v.HasValue ? (v.Value.Kind == DateTimeKind.Utc ? v.Value : v.Value.ToUniversalTime()) : v,
             v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
 
+        // "nvarchar(max)" is SQL Server-specific syntax; SQLite's column-type parser rejects the
+        // non-numeric "max" argument, so only apply it when actually targeting SQL Server. This
+        // keeps production (SQL Server) behavior unchanged while allowing an in-memory SQLite
+        // provider to be used for WebApplicationFactory-based API contract tests.
+        var isSqlServer = Database.IsSqlServer();
+
         // --- Series ---
         modelBuilder.Entity<Series>(e =>
         {
@@ -35,6 +41,8 @@ public class AppDbContext : DbContext
             e.Property(x => x.SeriesId).ValueGeneratedNever();
             e.Property(x => x.CreatedAt).HasColumnType("datetime2").HasConversion(utcConverter);
             e.Property(x => x.UpdatedAt).HasColumnType("datetime2").HasConversion(utcConverter);
+            var detailsProperty = e.Property(x => x.Details);
+            if (isSqlServer) detailsProperty.HasColumnType("nvarchar(max)");
             e.HasIndex(x => new { x.OwnerUserId, x.Title }).IsUnique();
             e.HasIndex(x => new { x.OwnerUserId, x.CreatedAt });
         });
@@ -83,9 +91,9 @@ public class AppDbContext : DbContext
         {
             e.HasKey(x => x.SessionId);
             e.Property(x => x.SessionId).ValueGeneratedNever();
-            e.Property(x => x.WarmAccountsTriggered)
-                .HasColumnType("nvarchar(max)")
+            var warmAccountsTriggeredProperty = e.Property(x => x.WarmAccountsTriggered)
                 .HasConversion(warmAccountsTriggeredConverter);
+            if (isSqlServer) warmAccountsTriggeredProperty.HasColumnType("nvarchar(max)");
             e.HasOne<Session>().WithOne().HasForeignKey<SessionMetrics>(x => x.SessionId).OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -98,9 +106,9 @@ public class AppDbContext : DbContext
         {
             e.HasKey(x => x.SeriesId);
             e.Property(x => x.SeriesId).ValueGeneratedNever();
-            e.Property(x => x.WarmAccounts)
-                .HasColumnType("nvarchar(max)")
+            var warmAccountsProperty = e.Property(x => x.WarmAccounts)
                 .HasConversion(warmAccountsConverter);
+            if (isSqlServer) warmAccountsProperty.HasColumnType("nvarchar(max)");
             e.HasOne<Series>().WithOne().HasForeignKey<SeriesMetrics>(x => x.SeriesId).OnDelete(DeleteBehavior.Cascade);
         });
     }

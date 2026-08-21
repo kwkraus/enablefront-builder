@@ -252,6 +252,144 @@ public class SeriesServiceTests : IDisposable
         result!.Title.Should().Be("Visible");
     }
 
+    // ---------- Details: sanitized persistence ----------
+
+    [Fact]
+    public async Task CreateAsync_SanitizesDetails_BeforePersisting()
+    {
+        var result = await _sut.CreateAsync(
+            new CreateSeriesRequest("Details Series", "<p><b>Bold</b> text</p>"), OwnerUserId);
+
+        result.Details.Should().Be("<p><strong>Bold</strong> text</p>");
+
+        var saved = await _db.Series.FindAsync(result.SeriesId);
+        saved!.Details.Should().Be("<p><strong>Bold</strong> text</p>");
+    }
+
+    [Fact]
+    public async Task CreateAsync_LeavesDetailsNull_WhenNotProvided()
+    {
+        var result = await _sut.CreateAsync(new CreateSeriesRequest("No Details Series"), OwnerUserId);
+
+        result.Details.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_SanitizesDetails_BeforePersisting()
+    {
+        var series = BuildSeries("Alpha", OwnerUserId);
+        _db.Series.Add(series);
+        await _db.SaveChangesAsync();
+
+        var result = await _sut.UpdateAsync(
+            series.SeriesId, new UpdateSeriesRequest("Alpha", "<ul><li>One</li><li><i>Two</i></li></ul>"), OwnerUserId);
+
+        result!.Details.Should().Be("<ul><li>One</li><li><em>Two</em></li></ul>");
+
+        var saved = await _db.Series.FindAsync(series.SeriesId);
+        saved!.Details.Should().Be("<ul><li>One</li><li><em>Two</em></li></ul>");
+    }
+
+    [Fact]
+    public async Task UpdateAsync_AllowsOptionalEmptyDetails_OnSeriesWithNoExistingDetails()
+    {
+        var series = BuildSeries("Alpha", OwnerUserId);
+        _db.Series.Add(series);
+        await _db.SaveChangesAsync();
+
+        var result = await _sut.UpdateAsync(series.SeriesId, new UpdateSeriesRequest("Alpha"), OwnerUserId);
+
+        result!.Details.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("<p></p>")]
+    public async Task UpdateAsync_ClearsDetails_ToNull_WhenBlankOrWhitespaceProvided(string blankDetails)
+    {
+        var series = BuildSeries("Alpha", OwnerUserId);
+        series.Details = "<p>Existing details</p>";
+        _db.Series.Add(series);
+        await _db.SaveChangesAsync();
+
+        var result = await _sut.UpdateAsync(series.SeriesId, new UpdateSeriesRequest("Alpha", blankDetails), OwnerUserId);
+
+        result!.Details.Should().BeNull();
+
+        var saved = await _db.Series.FindAsync(series.SeriesId);
+        saved!.Details.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task CreateAsync_Accepts_ExactlyMaxLengthDetails()
+    {
+        var text = new string('a', EnableFront.Builder.Common.SeriesDetailsSanitizer.MaxPlainTextLength);
+
+        var result = await _sut.CreateAsync(new CreateSeriesRequest("Max Length Series", text), OwnerUserId);
+
+        result.Details.Should().Be(text);
+    }
+
+    [Fact]
+    public async Task CreateAsync_Rejects_OneOverMaxLengthDetails_AndPersistsNothing()
+    {
+        var text = new string('a', EnableFront.Builder.Common.SeriesDetailsSanitizer.MaxPlainTextLength + 1);
+
+        Func<Task> act = () => _sut.CreateAsync(new CreateSeriesRequest("Too Long Series", text), OwnerUserId);
+
+        await act.Should().ThrowAsync<SeriesDetailsTooLongException>();
+        (await _db.Series.AnyAsync(s => s.Title == "Too Long Series")).Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_Rejects_OneOverMaxLengthDetails_AndPersistsNoPartialUpdate()
+    {
+        var series = BuildSeries("Alpha", OwnerUserId);
+        series.Details = "<p>Original details</p>";
+        _db.Series.Add(series);
+        await _db.SaveChangesAsync();
+
+        var text = new string('a', EnableFront.Builder.Common.SeriesDetailsSanitizer.MaxPlainTextLength + 1);
+
+        Func<Task> act = () => _sut.UpdateAsync(series.SeriesId, new UpdateSeriesRequest("Changed Title", text), OwnerUserId);
+
+        await act.Should().ThrowAsync<SeriesDetailsTooLongException>();
+
+        var saved = await _db.Series.FindAsync(series.SeriesId);
+        saved!.Title.Should().Be("Alpha", "no partial update should be persisted when validation fails");
+        saved.Details.Should().Be("<p>Original details</p>");
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ReturnsNull_ForWrongOwner_EvenWhenDetailsProvided()
+    {
+        var series = BuildSeries("Alpha", OwnerUserId);
+        _db.Series.Add(series);
+        await _db.SaveChangesAsync();
+
+        var result = await _sut.UpdateAsync(
+            series.SeriesId, new UpdateSeriesRequest("Hack", "<p>Hacked details</p>"), OtherUserId);
+
+        result.Should().BeNull();
+
+        var saved = await _db.Series.FindAsync(series.SeriesId);
+        saved!.Details.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_ReturnsSanitizedDetails_ForCorrectOwner()
+    {
+        var series = BuildSeries("Alpha", OwnerUserId);
+        series.Details = "<p><strong>Already sanitized</strong></p>";
+        _db.Series.Add(series);
+        await _db.SaveChangesAsync();
+
+        var result = await _sut.GetByIdAsync(series.SeriesId, OwnerUserId);
+
+        result!.Details.Should().Be("<p><strong>Already sanitized</strong></p>");
+    }
+
     // ---------- Helpers ----------
 
     private static EnableFront.Builder.Domain.Entities.Series BuildSeries(string title, string owner) =>
