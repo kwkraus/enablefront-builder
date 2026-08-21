@@ -12,7 +12,7 @@ namespace EnableFront.Builder.Features.Export;
 /// into the markdown output:</para>
 /// <list type="bullet">
 ///   <item>Series: <c>Title</c>, <c>CreatedAt</c></item>
-///   <item>Session: <c>Title</c>, <c>StartsAt</c>, <c>EndsAt</c></item>
+///   <item>Session: <c>Title</c>, <c>StartsAt</c>, <c>EndsAt</c>, <c>RegistrationUrl</c> (when set)</item>
 /// </list>
 /// <para>Fields that are deliberately <em>excluded</em>:
 /// <c>Email</c>, <c>EntraUserId</c>,
@@ -70,7 +70,8 @@ public sealed class MarkdownExportService
                 s.SessionId,
                 s.Title,
                 s.StartsAt,
-                s.EndsAt
+                s.EndsAt,
+                s.RegistrationUrl
             })
             .ToListAsync(cancellationToken);
 
@@ -112,6 +113,11 @@ public sealed class MarkdownExportService
                 else
                 {
                     sb.AppendLine("- **Schedule:** Not yet set");
+                }
+
+                if (!string.IsNullOrWhiteSpace(session.RegistrationUrl))
+                {
+                    sb.AppendLine($"- **Registration Link:** {session.RegistrationUrl}");
                 }
 
                 sb.AppendLine();
