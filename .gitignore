@@ -14,3 +14,21 @@ Thumbs.db
 # local env files
 .env
 .env.*
+
+# Node.js / frontend
+node_modules/
+dist/
+build/
+coverage/
+.next/
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+packages/
+
+# temporary files
+*.tmp
+*.swp

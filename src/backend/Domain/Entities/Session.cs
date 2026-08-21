@@ -8,4 +8,5 @@ public class Session
     public string Title { get; set; } = string.Empty;
     public DateTime StartsAt { get; set; }
     public DateTime EndsAt { get; set; }
+    public string? RegistrationUrl { get; set; }
 }
